@@ -1,0 +1,120 @@
+# ./bin/tfastx36 -m 10 -p seq/mgstm1.aa seq/mgstm1.e05
+TFASTX compares a protein to a translated DNA data bank
+ version 36.3.8i Nov, 2020
+Please cite:
+ Pearson et al, Genomics (1997) 46:24-36
+
+Query: seq/mgstm1.aa
+  1>>>sp|P10649|GSTM1_MOUSE Glutathione S-transferase Mu 1; GST 1-1; GST class-mu 1; Glutathione S-transferase GT8.7; pmGT10 - 218 aa
+Library: seq/mgstm1.e05
+     1135 residues in     1 sequences
+
+Statistics: (shuffled [188]) MLE statistics: Lambda= 0.1967;  K=0.003661
+ statistics sampled from 1 (1) to 187 sequences
+Algorithm: TFASTX (3.8 June 2014) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -12/-2, shift: -20
+ ktup: 2, E-join: 0.5 (0.5), E-opt: 0.1 (0.5), width:  16
+ Scan time:  0.020
+
+The best scores are:                             initn opt bits E(1)
+pGT875 | 266 with an average of 5% of (1135) [f]  693  997 295.7 2.3e-84
+pGT875 | 266 with an average of 5% of (1135) [r]   33   33 22.2   0.051
+
+>>>sp|P10649|GSTM1_MOUSE, 218 aa vs seq/mgstm1.e05 library
+; pg_name: tfastx36
+; pg_ver: 36.3.8i Nov, 2020
+; pg_argv:  ./bin/tfastx36 -m 10 -p seq/mgstm1.aa seq/mgstm1.e05; pg_name_alg: TFASTX
+; pg_ver_rel: 3.8 June 2014
+; pg_matrix: BL50 (15:-5)
+; pg_open_ext: -12 -2
+; pg_ktup: 2
+; pg_join_E(): 0.5 (0.5)
+; pg_optcut_E(): 0.1 (0.5)
+; mp_extrap: 60000 187
+; mp_stats: (shuffled [188]) MLE statistics: Lambda= 0.1967;  K=0.003661
+; mp_KS: -0.0000 (N=0) at   0
+; mp_Algorithm: TFASTX (3.8 June 2014) [optimized]
+; mp_Parameters: BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.5), E-opt: 0.1 (0.5), width:  16
+>>pGT875 | 266 with an average of 5% of residues modified by mutr.
+; tfx_frame: f
+; tfx_initn: 693
+; tfx_init1: 408
+; tfx_opt: 997
+; tfx_z-score: 1546.9
+; tfx_bits: 295.7
+; tfx_expect: 2.3e-84
+; sw_score: 997
+; sw_ident: 0.872
+; sw_sim: 0.927
+; sw_overlap: 219
+>sp|P10649|GS ..
+; sq_len: 218
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 218
+; al_display_start: 1
+MPMI-LGYWNVRGLTHPIRMLLEYTDSSYDEKRYTMGD-APDFDRSQWLN
+EK-FKLGLDFP-NLPYLIDGSHKITQ-SNAILRYLA-RKHHLDGETEEER
+IRADIVENQVM-DTRMQLIMLC-YNPDFEKQKPEFLKTIPEKM-KLYSEF
+LG-KRPWFAGDK-VTYVDFLAYDILDQYRMFEP-KCLDAFPNLR-DFLAR
+FEGLKKISA-YMKSSRYIATP-IFSKMAHWSNK
+>pGT875 ..
+; sq_len: 1135
+; sq_offset: 1
+; sq_type: p
+; al_start: 40
+; al_stop: 697
+; al_display_start: 40
+MPMI/MGYWKVRGLTHPIRMLLEYTDPSYDEKRYTMGD\APDFDR-QWLN
+EK\FKLGLEFP\NLPYLIDGSHKITQ/ENAILRYLA/HKAHLEEMTEEER
+IRADIVENQIA\GNPLQXXMLS\YNLDFEKQKPEFLKTIPEKM/ELYSEF
+LGCKRPWFAWDK\VTYVDFFAYDILDQYRMFEP/KCLDAFPNLR\DFLAR
+FEGLKKISA\YMKSSRYIGTA\IFTKMAHWSNK
+; al_cons:
+::::-.:::.:::::::::::::::: :::::::::::-::::::-::::
+::-:::::.::-::::::::::::::- ::::::::-.: ::.  :::::
+:::::::::. - . .:  :: -:: :::::::::::::::::-.:::::
+::-:::::: ::-::::::.:::::::::::::-::::::::::-:::::
+:::::::::-::::::::.: -::.::::::::
+>>pGT875 | 266 with an average of 5% of residues modified by mutr.
+; tfx_frame: r
+; tfx_initn:  69
+; tfx_init1:  33
+; tfx_opt:  33
+; tfx_z-score: 68.5
+; tfx_bits: 22.2
+; tfx_expect:  0.051
+; sw_score: 36
+; sw_ident: 0.298
+; sw_sim: 0.511
+; sw_overlap: 47
+>sp|P10649|GS ..
+; sq_len: 218
+; sq_offset: 1
+; sq_type: p
+; al_start: 12
+; al_stop: 58
+; al_display_start: 12
+GLTHPIRMLLEYTDSSYDEKRYTMGDAPDFDRSQWLNEKFKLGLDFP
+>pGT875 ..
+; sq_len: 1135
+; sq_offset: 1136
+; sq_type: p
+; al_start: 477
+; al_stop: 352
+; al_display_start: 477
+GLLHPRNS--E*SSFSQGWSSRTLASA---SQSQGCNESMXXCSGFP
+; al_cons:
+:: ::   --: .. :   .  :...:---..::  ::..     ::
+
+>>><<<
+>>>///
+
+218 residues in 1 query   sequences
+1135 residues in 1 library sequences
+ Tcomplib [36.3.8i Nov, 2020] (8 proc in memory [0G])
+ start: Thu Sep 16 08:44:12 2021 done: Thu Sep 16 08:44:12 2021
+ Total Scan time:  0.020 Total Display time:  0.010
+
+Function used was TFASTX [36.3.8i Nov, 2020]

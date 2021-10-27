@@ -1,0 +1,78 @@
+# ./bin/tfastx36 -m 10 -p seq/mgstm1.e05 seq/mgstm1.aa
+TFASTX compares a protein to a translated DNA data bank
+ version 36.3.8i Nov, 2020
+Please cite:
+ Pearson et al, Genomics (1997) 46:24-36
+
+Query: seq/mgstm1.e05
+  1>>>pGT875 | 266 with an average of 5% of residues modified by mutr. - 1135 aa
+Library: seq/mgstm1.aa
+      155 residues in     1 sequences
+
+Statistics: (shuffled [10]) Unscaled statistics: mu= 17.4000  var=17.4000; Lambda=    inf
+ statistics sampled from 0 (0) to 0 sequences
+Algorithm: TFASTX (3.8 June 2014) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -12/-2, shift: -20
+ ktup: 2, E-join: 0.5 (0), E-opt: 0.1 (0), width:  16
+ Scan time:  0.010
+
+The best scores are:                             initn opt bits E(1)
+sp|P10649|GSTM1_MOUSE Glutathione S-t ( 155) [f]   12   12 -inf       1
+sp|P10649|GSTM1_MOUSE Glutathione S-t ( 155) [r]    0    0 -inf       1
+
+>>>pGT875, 1135 aa vs seq/mgstm1.aa library
+; pg_name: tfastx36
+; pg_ver: 36.3.8i Nov, 2020
+; pg_argv:  ./bin/tfastx36 -m 10 -p seq/mgstm1.e05 seq/mgstm1.aa; pg_name_alg: TFASTX
+; pg_ver_rel: 3.8 June 2014
+; pg_matrix: BL50 (15:-5)
+; pg_open_ext: -12 -2
+; pg_ktup: 2
+; pg_join_E(): 0.5 (0)
+; pg_optcut_E(): 0.1 (0)
+; mp_extrap: 60000 0
+; mp_stats: (shuffled [10]) Unscaled statistics: mu= 17.4000  var=17.4000; Lambda=    inf
+; mp_KS: -0.0000 (N=0) at   0
+; mp_Algorithm: TFASTX (3.8 June 2014) [optimized]
+; mp_Parameters: BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0), E-opt: 0.1 (0), width:  16
+>>sp|P10649|GSTM1_MOUSE Glutathione S-transferase Mu 1; GST 1-1; GST class-mu 1; Glutathione S-transferase GT8.7; pmGT10
+; tfx_frame: f
+; tfx_initn:  12
+; tfx_init1:  12
+; tfx_opt:  14
+; tfx_z-score: -inf
+; tfx_bits: -inf
+; tfx_expect:      1
+; sw_score: 12
+; sw_ident: 1.000
+; sw_sim: 1.000
+; sw_overlap: 2
+>pGT875 ..
+; sq_len: 1135
+; sq_offset: 1
+; sq_type: p
+; al_start: 187
+; al_stop: 188
+; al_display_start: 187
+NT
+>sp|P10649|GSTM1_MOUSE ..
+; sq_len: 155
+; sq_offset: 1
+; sq_type: p
+; al_start: 78
+; al_stop: 83
+; al_display_start: 78
+NT
+; al_cons:
+::
+
+>>><<<
+>>>///
+
+1135 residues in 1 query   sequences
+155 residues in 1 library sequences
+ Tcomplib [36.3.8i Nov, 2020] (8 proc in memory [0G])
+ start: Wed Sep 15 17:14:14 2021 done: Wed Sep 15 17:14:14 2021
+ Total Scan time:  0.010 Total Display time:  0.000
+
+Function used was TFASTX [36.3.8i Nov, 2020]

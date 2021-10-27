@@ -1,0 +1,28 @@
+# ./bin/fasta36 -m 10 query5.fasta data5.fasta
+FASTA searches a protein or DNA sequence data bank
+ version 36.3.8h May, 2020
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query: query5.fasta
+  1>>>query - 3 aa
+Library: data5.fasta
+        0 residues in     0 sequences
+
+Statistics: Altschul/Gish params: n0: 3 Lambda: 0.158 K: 0.019 H: 0.100
+ statistics sampled from 0 (0) to 0 sequences
+Algorithm: FASTA (3.8 Nov 2011) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ ktup: 1, E-join: 1 (-nan), E-opt: 0.2 (-nan), width:  16
+ Scan time:  0.010
+!! No sequences with E() < 10
+>>><<<
+>>>///
+
+3 residues in 1 query   sequences
+0 residues in 0 library sequences
+ Tcomplib [36.3.8h May, 2020] (8 proc in memory [0G])
+ start: Tue May 18 11:35:34 2021 done: Tue May 18 11:35:34 2021
+ Total Scan time:  0.010 Total Display time:  0.000
+
+Function used was FASTA [36.3.8h May, 2020]

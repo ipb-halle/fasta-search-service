@@ -1,0 +1,77 @@
+# ./bin/fasta36 -m 10 query3.fasta data3.fasta
+FASTA searches a protein or DNA sequence data bank
+ version 36.3.8h May, 2020
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query: query3.fasta
+  1>>>query1 - 39 aa
+Library: data3.fasta
+        3 residues in     1 sequences
+
+Statistics: (shuffled [500]) Unscaled statistics: mu= 13.3500  var=0.2280; Lambda= 1.8561
+ statistics sampled from 1 (1) to 500 sequences
+Algorithm: FASTA (3.8 Nov 2011) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ ktup: 1, E-join: 1 (1), E-opt: 0.2 (1), width:  16
+ Scan time:  0.000
+
+The best scores are:                                      opt bits E(1)
+seq1                                               (   3)   13 6.3    0.76
+
+>>>query1, 39 aa vs data3.fasta library
+; pg_name: fasta36
+; pg_ver: 36.3.8h May, 2020
+; pg_argv:  ./bin/fasta36 -m 10 query3.fasta data3.fasta; pg_name_alg: FASTA
+; pg_ver_rel: 3.8 Nov 2011
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; pg_ktup: 1
+; pg_join_E(): 1 (1)
+; pg_optcut_E(): 0.2 (1)
+; mp_extrap: 60000 500
+; mp_stats: (shuffled [500]) Unscaled statistics: mu= 13.3500  var=0.2280; Lambda= 1.8561
+; mp_KS: -0.0000 (N=0) at   0
+; mp_Algorithm: FASTA (3.8 Nov 2011) [optimized]
+; mp_Parameters: BL50 matrix (15:-5), open/ext: -10/-2  ktup: 1, E-join: 1 (1), E-opt: 0.2 (1), width:  16
+>>seq1
+; fa_frame: f
+; fa_initn:  13
+; fa_init1:  13
+; fa_opt:  13
+; fa_z-score: 42.7
+; fa_bits: 6.3
+; fa_expect:   0.76
+; sw_score: 13
+; sw_ident: 1.000
+; sw_sim: 1.000
+; sw_overlap: 1
+>query1 ..
+; sq_len: 39
+; sq_offset: 1
+; sq_type: p
+; al_start: 31
+; al_stop: 31
+; al_display_start: 1
+KSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA
+>seq1 ..
+; sq_len: 3
+; sq_offset: 1
+; sq_type: p
+; al_start: 3
+; al_stop: 3
+; al_display_start: 1
+----------------------------ABC
+; al_cons:
+                              :
+
+>>><<<
+>>>///
+
+39 residues in 1 query   sequences
+3 residues in 1 library sequences
+ Tcomplib [36.3.8h May, 2020] (8 proc in memory [0G])
+ start: Tue May 18 11:08:03 2021 done: Tue May 18 11:08:03 2021
+ Total Scan time:  0.000 Total Display time:  0.000
+
+Function used was FASTA [36.3.8h May, 2020]

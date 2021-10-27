@@ -1,0 +1,990 @@
+# ./bin/tfastx36 -m 10 query11.fasta data11.fasta
+TFASTX compares a protein to a translated DNA data bank
+ version 36.3.8i Nov, 2020
+Please cite:
+ Pearson et al, Genomics (1997) 46:24-36
+
+Query: query11.fasta
+  1>>>query1 query sequence - 50 aa
+Library: data11.fasta
+     6897 residues in     7 sequences
+
+Statistics: (shuffled [20]) MLE statistics: Lambda= 0.1839;  K=0.003789
+ statistics sampled from 6 (6) to 19 sequences
+Algorithm: TFASTX (3.8 June 2014) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -12/-2, shift: -20
+ ktup: 2, E-join: 0.5 (0.429), E-opt: 0.1 (0.429), width:  16
+ Scan time:  0.020
+
+The best scores are:                             initn opt bits E(7)
+ENA|BAA28282|BAA28282.1 Escherichia c ( 870) [f]  313  313 99.5 3.5e-25
+ENA|CAA06312|CAA06312.1 Salmonella en ( 876) [f]  254  256 84.3 1.2e-20
+ENA|CAA25753|CAA25753.1 Bacillus cere ( 921) [f]  118  128 50.4 2.2e-10
+ENA|BAA14224|BAA14224.1 Streptomyces  ( 978) [f]   95  110 45.6 6.4e-09
+ENA|CAA27733|CAA27733.1 Staphylococcu ( 846) [f]   89   97 42.2   6e-08
+ENA|BAB06346|BAB06346.1 Bacillus halo ( 927) [f]   75   85 39.0   6e-07
+ENA|BAA14224|BAA14224.1 Streptomyces  ( 978) [r]   32   32 24.9   0.011
+ENA|BAB06346|BAB06346.1 Bacillus halo ( 927) [r]   30   30 24.4   0.015
+ENA|BAC26705|BAC26705.1 Mus musculus  (1479) [r]   31   31 24.7    0.02
+ENA|BAC26705|BAC26705.1 Mus musculus  (1479) [f]   29   29 24.1   0.028
+ENA|CAA06312|CAA06312.1 Salmonella en ( 876) [r]   23   23 22.5   0.051
+ENA|CAA27733|CAA27733.1 Staphylococcu ( 846) [r]   22   22 22.3   0.059
+ENA|BAA28282|BAA28282.1 Escherichia c ( 870) [r]   21   21 22.0   0.072
+ENA|CAA25753|CAA25753.1 Bacillus cere ( 921) [r]   19   19 21.5    0.11
+
+>>>query1, 50 aa vs data11.fasta library
+; pg_name: tfastx36
+; pg_ver: 36.3.8i Nov, 2020
+; pg_argv:  ./bin/tfastx36 -m 10 query11.fasta data11.fasta; pg_name_alg: TFASTX
+; pg_ver_rel: 3.8 June 2014
+; pg_matrix: BL50 (15:-5)
+; pg_open_ext: -12 -2
+; pg_ktup: 2
+; pg_join_E(): 0.5 (0.429)
+; pg_optcut_E(): 0.1 (0.429)
+; mp_extrap: 60000 19
+; mp_stats: (shuffled [20]) MLE statistics: Lambda= 0.1839;  K=0.003789
+; mp_KS: -0.0000 (N=0) at   0
+; mp_Algorithm: TFASTX (3.8 June 2014) [optimized]
+; mp_Parameters: BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.429), E-opt: 0.1 (0.429), width:  16
+>>ENA|BAA28282|BAA28282.1 Escherichia coli beta-lactamase
+; tfx_frame: f
+; tfx_initn: 330
+; tfx_init1: 313
+; tfx_opt: 313
+; tfx_z-score: 499.8
+; tfx_bits: 99.5
+; tfx_expect: 3.5e-25
+; sw_score: 313
+; sw_ident: 1.000
+; sw_sim: 1.000
+; sw_overlap: 50
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 50
+; al_display_start: 1
+SAVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA
+>ENA|BAA28282|BAA28282.1 ..
+; sq_len: 870
+; sq_offset: 1
+; sq_type: p
+; al_start: 91
+; al_stop: 240
+; al_display_start: 91
+SAVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA
+; al_cons:
+::::::::::::::::::::::::::::::::::::::::::::::::::
+>>ENA|CAA06312|CAA06312.1 Salmonella enterica subsp. enterica serovar Typhimurium CTX-M-7
+; tfx_frame: f
+; tfx_initn: 269
+; tfx_init1: 254
+; tfx_opt: 256
+; tfx_z-score: 418.0
+; tfx_bits: 84.3
+; tfx_expect: 1.2e-20
+; sw_score: 256
+; sw_ident: 0.800
+; sw_sim: 0.940
+; sw_overlap: 50
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 50
+; al_display_start: 1
+SAVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA
+>ENA|CAA06312|CAA06312.1 ..
+; sq_len: 876
+; sq_offset: 1
+; sq_type: p
+; al_start: 91
+; al_stop: 240
+; al_display_start: 91
+NSVQQQLEALEKSSGGRLGVALINTADNSQILYVADERFAMCSTSKVMAA
+; al_cons:
+..:::.: :::::::::::::::.::::.:.:: .:::: ::::::::::
+>>ENA|CAA25753|CAA25753.1 Bacillus cereus type 1 penicillinase
+; tfx_frame: f
+; tfx_initn: 120
+; tfx_init1: 118
+; tfx_opt: 128
+; tfx_z-score: 234.1
+; tfx_bits: 50.4
+; tfx_expect: 2.2e-10
+; sw_score: 128
+; sw_ident: 0.449
+; sw_sim: 0.735
+; sw_overlap: 49
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 2
+; al_stop: 50
+; al_display_start: 2
+AVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA
+>ENA|CAA25753|CAA25753.1 ..
+; sq_len: 921
+; sq_offset: 1
+; sq_type: p
+; al_start: 148
+; al_stop: 294
+; al_display_start: 148
+ATHKEFSQLEKKFDARLGVYAIDTGTNQTISYRPNERFAFASTYKALAA
+; al_cons:
+:...... :::.  .::::  :::. :  . :: .::: . :: :..::
+>>ENA|BAA14224|BAA14224.1 Streptomyces cacaoi beta-lactamase
+; tfx_frame: f
+; tfx_initn: 117
+; tfx_init1:  95
+; tfx_opt: 110
+; tfx_z-score: 207.8
+; tfx_bits: 45.6
+; tfx_expect: 6.4e-09
+; sw_score: 110
+; sw_ident: 0.408
+; sw_sim: 0.714
+; sw_overlap: 49
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 2
+; al_stop: 50
+; al_display_start: 2
+AVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA
+>ENA|BAA14224|BAA14224.1 ..
+; sq_len: 978
+; sq_offset: 1
+; sq_type: p
+; al_start: 154
+; al_stop: 300
+; al_display_start: 154
+AHEKEFRALEKKFDAHPGVYAIDTRDGQEITHRADERFAYGSTFKALQA
+; al_cons:
+: .... ::::.  .. ::  ::: :. .. .:.:::: . :: :.. :
+>>ENA|CAA27733|CAA27733.1 Staphylococcus aureus hypothetical protein
+; tfx_frame: f
+; tfx_initn:  93
+; tfx_init1:  89
+; tfx_opt:  97
+; tfx_z-score: 190.3
+; tfx_bits: 42.2
+; tfx_expect:  6e-08
+; sw_score: 97
+; sw_ident: 0.354
+; sw_sim: 0.729
+; sw_overlap: 48
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 48
+; al_display_start: 1
+SAVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVM
+>ENA|CAA27733|CAA27733.1 ..
+; sq_len: 846
+; sq_offset: 1
+; sq_type: p
+; al_start: 61
+; al_stop: 204
+; al_display_start: 61
+SSHAKELNDLEKKYNAHIGVYALDTKSGKEVKFNSDKRFAYASTSKAI
+; al_cons:
+:.  ..:  :::. ....::  .:: .. .: . .:.:: . ::::..
+>>ENA|BAB06346|BAB06346.1 Bacillus halodurans C-125 glutaminase
+; tfx_frame: f
+; tfx_initn:  77
+; tfx_init1:  75
+; tfx_opt:  85
+; tfx_z-score: 172.4
+; tfx_bits: 39.0
+; tfx_expect:  6e-07
+; sw_score: 85
+; sw_ident: 0.340
+; sw_sim: 0.638
+; sw_overlap: 47
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 3
+; al_stop: 49
+; al_display_start: 3
+VQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMA
+>ENA|BAB06346|BAB06346.1 ..
+; sq_len: 927
+; sq_offset: 1
+; sq_type: p
+; al_start: 70
+; al_stop: 210
+; al_display_start: 70
+VASYIPALAKADVSTLGIAIYRGGDEQVIAGDADEKFTLQSISKVIA
+; al_cons:
+: . . :: :.. . ::.:.   .:.  .   .::.: . : :::.:
+>>ENA|BAA14224|BAA14224.1 Streptomyces cacaoi beta-lactamase
+; tfx_frame: r
+; tfx_initn:  77
+; tfx_init1:  32
+; tfx_opt:  34
+; tfx_z-score: 96.0
+; tfx_bits: 24.9
+; tfx_expect:  0.011
+; sw_score: 34
+; sw_ident: 0.625
+; sw_sim: 0.875
+; sw_overlap: 8
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 9
+; al_stop: 16
+; al_display_start: 9
+ALEKSSGG
+>ENA|BAA14224|BAA14224.1 ..
+; sq_len: 978
+; sq_offset: 979
+; sq_type: p
+; al_start: 36
+; al_stop: 13
+; al_display_start: 36
+AEEKTTGG
+; al_cons:
+: ::..::
+>--
+; tfx_frame: r
+; tfx_initn:  61
+; tfx_init1:  25
+; tfx_opt:  33
+; tfx_z-score: 97.4
+; tfx_bits: 25.2
+; tfx_expect:  0.009
+; sw_score: 33
+; sw_ident: 0.462
+; sw_sim: 0.615
+; sw_overlap: 13
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 16
+; al_stop: 28
+; al_display_start: 16
+GRLGVALIDTADN
+>ENA|BAA14224|BAA14224.1 ..
+; sq_len: 978
+; sq_offset: 979
+; sq_type: p
+; al_start: 918
+; al_stop: 880
+; al_display_start: 918
+GVLGVAVAHHRDD
+; al_cons:
+: ::::.    :.
+>>ENA|BAB06346|BAB06346.1 Bacillus halodurans C-125 glutaminase
+; tfx_frame: r
+; tfx_initn:  61
+; tfx_init1:  30
+; tfx_opt:  37
+; tfx_z-score: 93.5
+; tfx_bits: 24.4
+; tfx_expect:  0.015
+; sw_score: 37
+; sw_ident: 0.300
+; sw_sim: 0.500
+; sw_overlap: 20
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 27
+; al_stop: 46
+; al_display_start: 27
+DNTQVLYRGDERFPMCSTSK
+>ENA|BAB06346|BAB06346.1 ..
+; sq_len: 927
+; sq_offset: 928
+; sq_type: p
+; al_start: 345
+; al_stop: 286
+; al_display_start: 345
+DHRV*RF*GDARFQL*NRIK
+; al_cons:
+:.    . :: :: . .  :
+>>ENA|BAC26705|BAC26705.1 Mus musculus (house mouse) hypothetical protein
+; tfx_frame: r
+; tfx_initn:  74
+; tfx_init1:  31
+; tfx_opt:  32
+; tfx_z-score: 91.3
+; tfx_bits: 24.7
+; tfx_expect:   0.02
+; sw_score: 36
+; sw_ident: 0.333
+; sw_sim: 0.750
+; sw_overlap: 12
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 38
+; al_stop: 49
+; al_display_start: 38
+RFPMCSTSKVMA
+>ENA|BAC26705|BAC26705.1 ..
+; sq_len: 1479
+; sq_offset: 1480
+; sq_type: p
+; al_start: 1053
+; al_stop: 1018
+; al_display_start: 1053
+QFPHCACQFLLA
+; al_cons:
+.:: :. . ..:
+>--
+; tfx_frame: r
+; tfx_initn:  69
+; tfx_init1:  31
+; tfx_opt:  32
+; tfx_z-score: 92.8
+; tfx_bits: 24.9
+; tfx_expect:  0.016
+; sw_score: 32
+; sw_ident: 0.412
+; sw_sim: 0.647
+; sw_overlap: 17
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 9
+; al_stop: 25
+; al_display_start: 9
+ALEKSSGGRLGVALIDT
+>ENA|BAC26705|BAC26705.1 ..
+; sq_len: 1479
+; sq_offset: 1480
+; sq_type: p
+; al_start: 998
+; al_stop: 948
+; al_display_start: 998
+SLLHSFLGRLMSSM*DT
+; al_cons:
+.: .:  :::  .. ::
+>>ENA|BAC26705|BAC26705.1 Mus musculus (house mouse) hypothetical protein
+; tfx_frame: f
+; tfx_initn:  44
+; tfx_init1:  29
+; tfx_opt:  29
+; tfx_z-score: 88.5
+; tfx_bits: 24.1
+; tfx_expect:  0.028
+; sw_score: 29
+; sw_ident: 1.000
+; sw_sim: 1.000
+; sw_overlap: 4
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 35
+; al_stop: 38
+; al_display_start: 35
+GDER
+>ENA|BAC26705|BAC26705.1 ..
+; sq_len: 1479
+; sq_offset: 1
+; sq_type: p
+; al_start: 1258
+; al_stop: 1269
+; al_display_start: 1258
+GDER
+; al_cons:
+::::
+>>ENA|CAA06312|CAA06312.1 Salmonella enterica subsp. enterica serovar Typhimurium CTX-M-7
+; tfx_frame: r
+; tfx_initn:  41
+; tfx_init1:  23
+; tfx_opt:  26
+; tfx_z-score: 83.9
+; tfx_bits: 22.5
+; tfx_expect:  0.051
+; sw_score: 26
+; sw_ident: 0.211
+; sw_sim: 0.526
+; sw_overlap: 19
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 30
+; al_stop: 48
+; al_display_start: 30
+QVLYRGDERFPMCSTSKVM
+>ENA|CAA06312|CAA06312.1 ..
+; sq_len: 876
+; sq_offset: 877
+; sq_type: p
+; al_start: 215
+; al_stop: 159
+; al_display_start: 215
+HIAKRSSAT*RICELSAVL
+; al_cons:
+..  :..    .:  : :.
+>>ENA|CAA27733|CAA27733.1 Staphylococcus aureus hypothetical protein
+; tfx_frame: r
+; tfx_initn:  31
+; tfx_init1:  22
+; tfx_opt:  22
+; tfx_z-score: 82.8
+; tfx_bits: 22.3
+; tfx_expect:  0.059
+; sw_score: 23
+; sw_ident: 0.444
+; sw_sim: 0.778
+; sw_overlap: 9
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 7
+; al_stop: 15
+; al_display_start: 7
+LAALEKSSG
+>ENA|CAA27733|CAA27733.1 ..
+; sq_len: 846
+; sq_offset: 847
+; sq_type: p
+; al_start: 545
+; al_stop: 519
+; al_display_start: 545
+LRVLPKAAG
+; al_cons:
+: .: :..:
+>>ENA|BAA28282|BAA28282.1 Escherichia coli beta-lactamase
+; tfx_frame: r
+; tfx_initn:  19
+; tfx_init1:  18
+; tfx_opt:  29
+; tfx_z-score: 81.1
+; tfx_bits: 22.0
+; tfx_expect:  0.072
+; sw_score: 29
+; sw_ident: 0.294
+; sw_sim: 0.647
+; sw_overlap: 17
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 17
+; al_display_start: 1
+SAVQQKLAALEKSSGGR
+>ENA|BAA28282|BAA28282.1 ..
+; sq_len: 870
+; sq_offset: 871
+; sq_type: p
+; al_start: 504
+; al_stop: 454
+; al_display_start: 504
+SAIQTKRLIADRAGKSR
+; al_cons:
+::.: :    .... .:
+>--
+; tfx_frame: r
+; tfx_initn:  30
+; tfx_init1:  21
+; tfx_opt:  28
+; tfx_z-score: 91.2
+; tfx_bits: 23.9
+; tfx_expect:   0.02
+; sw_score: 28
+; sw_ident: 0.259
+; sw_sim: 0.519
+; sw_overlap: 27
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 15
+; al_stop: 41
+; al_display_start: 15
+GGRLGVALIDTADNTQVLYRGDERFPM
+>ENA|BAA28282|BAA28282.1 ..
+; sq_len: 870
+; sq_offset: 871
+; sq_type: p
+; al_start: 336
+; al_stop: 256
+; al_display_start: 336
+GNRIVVNQIGRLDLDRLIKQLLLRFTL
+; al_cons:
+:.:. :  :   :  ... .   :: .
+>--
+; tfx_frame: r
+; tfx_initn:  32
+; tfx_init1:  27
+; tfx_opt:  28
+; tfx_z-score: 91.2
+; tfx_bits: 23.9
+; tfx_expect:   0.02
+; sw_score: 28
+; sw_ident: 0.357
+; sw_sim: 0.500
+; sw_overlap: 14
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 34
+; al_stop: 47
+; al_display_start: 34
+RGDERFPMCSTSKV
+>ENA|BAA28282|BAA28282.1 ..
+; sq_len: 870
+; sq_offset: 871
+; sq_type: p
+; al_start: 203
+; al_stop: 162
+; al_display_start: 203
+RSSPR*STCVLSAV
+; al_cons:
+:.. :   :  : :
+>--
+; tfx_frame: r
+; tfx_initn:  23
+; tfx_init1:  20
+; tfx_opt:  25
+; tfx_z-score: 86.9
+; tfx_bits: 23.1
+; tfx_expect:  0.035
+; sw_score: 25
+; sw_ident: 0.500
+; sw_sim: 1.000
+; sw_overlap: 6
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 12
+; al_stop: 17
+; al_display_start: 12
+KSSGGR
+>ENA|BAA28282|BAA28282.1 ..
+; sq_len: 870
+; sq_offset: 871
+; sq_type: p
+; al_start: 779
+; al_stop: 762
+; al_display_start: 779
+RTSGAR
+; al_cons:
+..::.:
+>--
+; tfx_frame: r
+; tfx_initn:  18
+; tfx_init1:  18
+; tfx_opt:  23
+; tfx_z-score: 84.0
+; tfx_bits: 22.5
+; tfx_expect:   0.05
+; sw_score: 24
+; sw_ident: 0.556
+; sw_sim: 0.778
+; sw_overlap: 9
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 6
+; al_stop: 14
+; al_display_start: 6
+KLAALEKSS
+>ENA|BAA28282|BAA28282.1 ..
+; sq_len: 870
+; sq_offset: 871
+; sq_type: p
+; al_start: 389
+; al_stop: 363
+; al_display_start: 389
+KAAALSSAS
+; al_cons:
+: ::: ..:
+>--
+; tfx_frame: r
+; tfx_initn:  21
+; tfx_init1:  21
+; tfx_opt:  23
+; tfx_z-score: 84.0
+; tfx_bits: 22.5
+; tfx_expect:   0.05
+; sw_score: 23
+; sw_ident: 0.429
+; sw_sim: 0.714
+; sw_overlap: 14
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 10
+; al_stop: 23
+; al_display_start: 10
+LEKSSGGRLGVALI
+>ENA|BAA28282|BAA28282.1 ..
+; sq_len: 870
+; sq_offset: 871
+; sq_type: p
+; al_start: 68
+; al_stop: 27
+; al_display_start: 68
+LPSSSGMHAAAADI
+; al_cons:
+: .::: . ..: :
+>>ENA|CAA25753|CAA25753.1 Bacillus cereus type 1 penicillinase
+; tfx_frame: r
+; tfx_initn:  18
+; tfx_init1:  18
+; tfx_opt:  30
+; tfx_z-score: 77.8
+; tfx_bits: 21.5
+; tfx_expect:   0.11
+; sw_score: 30
+; sw_ident: 0.556
+; sw_sim: 0.667
+; sw_overlap: 9
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 42
+; al_stop: 50
+; al_display_start: 42
+CSTSKVMAA
+>ENA|CAA25753|CAA25753.1 ..
+; sq_len: 921
+; sq_offset: 922
+; sq_type: p
+; al_start: 101
+; al_stop: 75
+; al_display_start: 101
+CSDSPVKAS
+; al_cons:
+:: : : :.
+>--
+; tfx_frame: r
+; tfx_initn:  33
+; tfx_init1:  19
+; tfx_opt:  29
+; tfx_z-score: 92.1
+; tfx_bits: 24.1
+; tfx_expect:  0.018
+; sw_score: 29
+; sw_ident: 0.250
+; sw_sim: 0.625
+; sw_overlap: 24
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 18
+; al_stop: 41
+; al_display_start: 18
+LGVALIDTADNTQVLYRGDERFPM
+>ENA|CAA25753|CAA25753.1 ..
+; sq_len: 921
+; sq_offset: 922
+; sq_type: p
+; al_start: 496
+; al_stop: 425
+; al_display_start: 496
+LSVLLFY*IKCSLQYYHLNEQLPL
+; al_cons:
+:.: :. .   .   :. .:..:.
+>--
+; tfx_frame: r
+; tfx_initn:  18
+; tfx_init1:  18
+; tfx_opt:  26
+; tfx_z-score: 87.8
+; tfx_bits: 23.3
+; tfx_expect:  0.031
+; sw_score: 29
+; sw_ident: 0.600
+; sw_sim: 0.800
+; sw_overlap: 5
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 38
+; al_stop: 42
+; al_display_start: 38
+RFPMC
+>ENA|CAA25753|CAA25753.1 ..
+; sq_len: 921
+; sq_offset: 922
+; sq_type: p
+; al_start: 530
+; al_stop: 516
+; al_display_start: 530
+RSPIC
+; al_cons:
+: :.:
+>--
+; tfx_frame: r
+; tfx_initn:  18
+; tfx_init1:  18
+; tfx_opt:  26
+; tfx_z-score: 87.8
+; tfx_bits: 23.3
+; tfx_expect:  0.031
+; sw_score: 26
+; sw_ident: 0.667
+; sw_sim: 1.000
+; sw_overlap: 3
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 40
+; al_stop: 42
+; al_display_start: 40
+PMC
+>ENA|CAA25753|CAA25753.1 ..
+; sq_len: 921
+; sq_offset: 922
+; sq_type: p
+; al_start: 687
+; al_stop: 679
+; al_display_start: 687
+PLC
+; al_cons:
+:.:
+>--
+; tfx_frame: r
+; tfx_initn:  15
+; tfx_init1:  15
+; tfx_opt:  23
+; tfx_z-score: 83.5
+; tfx_bits: 22.5
+; tfx_expect:  0.053
+; sw_score: 24
+; sw_ident: 0.500
+; sw_sim: 0.700
+; sw_overlap: 10
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 10
+; al_display_start: 1
+SAVQQKLAAL
+>ENA|CAA25753|CAA25753.1 ..
+; sq_len: 921
+; sq_offset: 922
+; sq_type: p
+; al_start: 178
+; al_stop: 149
+; al_display_start: 178
+SQVERTLYAL
+; al_cons:
+: :.. : ::
+>--
+; tfx_frame: r
+; tfx_initn:  20
+; tfx_init1:  18
+; tfx_opt:  22
+; tfx_z-score: 82.1
+; tfx_bits: 22.3
+; tfx_expect:  0.064
+; sw_score: 23
+; sw_ident: 0.300
+; sw_sim: 0.700
+; sw_overlap: 10
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 30
+; al_stop: 39
+; al_display_start: 30
+QVLYRGDERF
+>ENA|CAA25753|CAA25753.1 ..
+; sq_len: 921
+; sq_offset: 922
+; sq_type: p
+; al_start: 262
+; al_stop: 233
+; al_display_start: 262
+QIFR*VDKRL
+; al_cons:
+:..   :.:.
+>--
+; tfx_frame: r
+; tfx_initn:  18
+; tfx_init1:  18
+; tfx_opt:  22
+; tfx_z-score: 82.1
+; tfx_bits: 22.3
+; tfx_expect:  0.064
+; sw_score: 22
+; sw_ident: 0.333
+; sw_sim: 0.667
+; sw_overlap: 9
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 42
+; al_stop: 50
+; al_display_start: 42
+CSTSKVMAA
+>ENA|CAA25753|CAA25753.1 ..
+; sq_len: 921
+; sq_offset: 922
+; sq_type: p
+; al_start: 308
+; al_stop: 282
+; al_display_start: 308
+CSNTPAAKA
+; al_cons:
+::.. .  :
+>--
+; tfx_frame: r
+; tfx_initn:  27
+; tfx_init1:  19
+; tfx_opt:  22
+; tfx_z-score: 82.1
+; tfx_bits: 22.3
+; tfx_expect:  0.064
+; sw_score: 30
+; sw_ident: 0.385
+; sw_sim: 0.615
+; sw_overlap: 13
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 33
+; al_stop: 45
+; al_display_start: 33
+YRGDERFPMCSTS
+>ENA|CAA25753|CAA25753.1 ..
+; sq_len: 921
+; sq_offset: 922
+; sq_type: p
+; al_start: 732
+; al_stop: 694
+; al_display_start: 732
+YACSNKFVPCSIS
+; al_cons:
+:  ...:  :: :
+>--
+; tfx_frame: r
+; tfx_initn:  19
+; tfx_init1:  19
+; tfx_opt:  22
+; tfx_z-score: 82.1
+; tfx_bits: 22.3
+; tfx_expect:  0.064
+; sw_score: 23
+; sw_ident: 0.375
+; sw_sim: 0.625
+; sw_overlap: 8
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 38
+; al_stop: 45
+; al_display_start: 38
+RFPMCSTS
+>ENA|CAA25753|CAA25753.1 ..
+; sq_len: 921
+; sq_offset: 922
+; sq_type: p
+; al_start: 868
+; al_stop: 845
+; al_display_start: 868
+RLPLSHLS
+; al_cons:
+:.:.   :
+>--
+; tfx_frame: r
+; tfx_initn:  18
+; tfx_init1:  18
+; tfx_opt:  21
+; tfx_z-score: 80.7
+; tfx_bits: 22.0
+; tfx_expect:  0.076
+; sw_score: 22
+; sw_ident: 0.333
+; sw_sim: 1.000
+; sw_overlap: 6
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 31
+; al_stop: 36
+; al_display_start: 31
+VLYRGD
+>ENA|CAA25753|CAA25753.1 ..
+; sq_len: 921
+; sq_offset: 922
+; sq_type: p
+; al_start: 562
+; al_stop: 545
+; al_display_start: 562
+ILFQSD
+; al_cons:
+.:...:
+>--
+; tfx_frame: r
+; tfx_initn:  18
+; tfx_init1:  18
+; tfx_opt:  21
+; tfx_z-score: 80.7
+; tfx_bits: 22.0
+; tfx_expect:  0.076
+; sw_score: 21
+; sw_ident: 0.273
+; sw_sim: 0.636
+; sw_overlap: 11
+>query1 ..
+; sq_len: 50
+; sq_offset: 1
+; sq_type: p
+; al_start: 39
+; al_stop: 49
+; al_display_start: 39
+FPMCSTSKVMA
+>ENA|CAA25753|CAA25753.1 ..
+; sq_len: 921
+; sq_offset: 922
+; sq_type: p
+; al_start: 647
+; al_stop: 615
+; al_display_start: 647
+FPTVKALRFVA
+; al_cons:
+::  .. . .:
+
+>>><<<
+>>>///
+
+50 residues in 1 query   sequences
+6897 residues in 7 library sequences
+ Tcomplib [36.3.8i Nov, 2020] (8 proc in memory [0G])
+ start: Mon Sep  6 11:33:15 2021 done: Mon Sep  6 11:33:15 2021
+ Total Scan time:  0.020 Total Display time:  0.010
+
+Function used was TFASTX [36.3.8i Nov, 2020]
