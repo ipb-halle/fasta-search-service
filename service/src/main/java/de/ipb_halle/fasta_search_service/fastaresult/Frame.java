@@ -17,37 +17,44 @@
  */
 package de.ipb_halle.fasta_search_service.fastaresult;
 
-import java.util.HashMap;
-import java.util.Map;
+import static java.util.stream.Collectors.toMap;
 
+import java.util.Map;
+import java.util.stream.Stream;
+
+/**
+ * Orientation of an alignment result, which has different meanings for each
+ * program of the fasta36 suite.
+ * <p>
+ * What happens in the alignments in case frame is REVERSE?<p>
+ * - Protein query -> Protein DB (fasta36): no reverse permitted<p>
+ * - DNA query -> DNA DB (fasta36): query alignment is reverse complement, subject alignment is forward<p>
+ * - DNA query -> Protein DB (fastx36/fasty36): query alignment is reverse complement, subject alignment is forward<p>
+ * - Protein query -> DNA DB (tfastx36/tfasty36): query alignment is forward, subject alignment is reverse complement
+ * 
+ * @author flange
+ */
 public enum Frame {
-	FORWARD("f", "forward"),
-	REVERSE("r", "reverse");
+	FORWARD("f"),
+	REVERSE("r");
 
 	private final String pattern;
-	private final String name;
-	private static Map<String, Frame> lookupMap = new HashMap<>();
+	private static Map<String, Frame> lookupMap = Stream.of(values()).collect(toMap(e -> e.pattern, e -> e));
 
-	static {
-		for (Frame f : values()) {
-			lookupMap.put(f.pattern, f);
-		}
-	}
-
-	private Frame(String pattern, String name) {
+	private Frame(String pattern) {
 		this.pattern = pattern;
-		this.name = name;
 	}
 
+	/**
+	 * @param pattern value of the frame direction from a fasta36 result output
+	 * @return enumeration item matching the given pattern
+	 * @throws FastaResultParserException if the pattern matches no item
+	 */
 	public static Frame fromPattern(String pattern) throws FastaResultParserException {
 		Frame result = lookupMap.get(pattern);
 		if (result == null) {
 			throw new FastaResultParserException("Unknown pattern '" + pattern + "'.");
 		}
 		return result;
-	}
-
-	public String getName() {
-		return name;
 	}
 }

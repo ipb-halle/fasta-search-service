@@ -21,7 +21,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Data class holding information of an alignment hit of a FASTA search.
+ * Data class holding information of an alignment hit of a fasta search.
  * <p>
  * Objects of this class are immutable. Use the {@link FastaResultBuilder}
  * object supplied by {@link #builder()} to construct an object of this class.
@@ -31,12 +31,6 @@ import jakarta.validation.constraints.NotNull;
 public class FastaResult {
 	/*
 	 * fa_frame / sw_frame / fx_frame / tx_frame - frame direction
-	 * 
-	 * What happens in the alignments in case frame is REVERSE?
-	 * - Protein query -> Protein DB    (fasta): no reverse permitted
-	 * -     DNA query ->     DNA DB    (fasta): query alignment is reverse complement, subject alignment is forward
-	 * -     DNA query -> Protein DB  (fastx/y): query alignment is reverse complement, subject alignment is forward
-	 * - Protein query ->     DNA DB (tfastx/y): query alignment is forward, subject alignment is reverse complement
 	 */
 	@NotNull
 	private final Frame frame;
@@ -258,7 +252,7 @@ public class FastaResult {
 		return new FastaResultBuilder();
 	}
 
-	protected FastaResult(FastaResultBuilder builder) {
+	FastaResult(FastaResultBuilder builder) {
 		this.frame = builder.getFrame();
 		this.bitScore = builder.getBitScore();
 		this.expectationValue = builder.getExpectationValue();

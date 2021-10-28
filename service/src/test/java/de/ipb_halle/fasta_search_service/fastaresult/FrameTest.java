@@ -31,11 +31,6 @@ public class FrameTest {
 		assertEquals(Frame.FORWARD, Frame.fromPattern("f"));
 		assertEquals(Frame.REVERSE, Frame.fromPattern("r"));
 		assertThrows(FastaResultParserException.class, () -> Frame.fromPattern("abc"));
-	}
-
-	@Test
-	public void testGetName() {
-		assertEquals("forward", Frame.FORWARD.getName());
-		assertEquals("reverse", Frame.REVERSE.getName());
+		assertThrows(FastaResultParserException.class, () -> Frame.fromPattern(null));
 	}
 }

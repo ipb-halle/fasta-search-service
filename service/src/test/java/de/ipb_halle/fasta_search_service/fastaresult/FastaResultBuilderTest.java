@@ -31,7 +31,7 @@ public class FastaResultBuilderTest {
 	@Test
 	public void testDefaults() {
 		FastaResultBuilder builder = FastaResult.builder();
-		double delta = 0.001;
+		double delta = 0.0;
 
 		assertNull(builder.getFrame());
 		assertEquals(0.0d, builder.getBitScore(), delta);
@@ -113,10 +113,6 @@ public class FastaResultBuilderTest {
 		builder = FastaResult.builder();
 		assertSame(builder, builder.queryAlignmentDisplayStart(1575));
 		assertEquals(1575, builder.getQueryAlignmentDisplayStart());
-
-		builder = FastaResult.builder();
-		assertSame(builder, builder.queryAlignmentLine("abc"));
-		assertEquals("abc", builder.getQueryAlignmentLine());
 
 		builder = FastaResult.builder();
 		assertSame(builder, builder.queryAlignmentLine("abcd"));
