@@ -1,8 +1,8 @@
 #
 # Build web project with Maven
 #
-# Dockerfile: https://github.com/carlossg/docker-maven/blob/84e75894a94d204ab660c271e32984019ceb4070/openjdk-11/Dockerfile
-FROM maven:3.8.3-openjdk-11 AS mavenBuild
+# Dockerfile: https://github.com/carlossg/docker-maven/blob/84e75894a94d204ab660c271e32984019ceb4070/openjdk-8/Dockerfile
+FROM maven:3.8.3-openjdk-8 AS mavenBuild
 LABEL stage=fasta-search-service-builder
 
 WORKDIR /usr/src/app
@@ -18,9 +18,9 @@ RUN mvn -B -e -C package
 # The build and runtime environments need to be the same, because different Debian 
 # versions come with different versions of glibc.
 #
-# Dockerfile: https://github.com/tomitribe/docker-tomee/blob/master/TomEE-9.0/jre11/webprofile/Dockerfile
-# inherits from https://github.com/docker-library/openjdk/blob/3ce4449d7f01afa6001a711e17cdd379b76848f8/11/jre/buster/Dockerfile
-FROM tomee:11-jre-9.0.0-M7-webprofile AS fasta36Build
+# Dockerfile: https://github.com/tomitribe/docker-tomee/blob/58883d3a23534dc5ee1bc6cee455cf797650d507/TomEE-8.0/jre8/webprofile/Dockerfile
+# inherits from https://github.com/docker-library/openjdk/blob/c2daf6399c18547284d96995c633b0eecefc608f/8/jre/buster/Dockerfile
+FROM tomee:8-jre-8.0.8-webprofile AS fasta36Build
 LABEL stage=fasta-search-service-builder
 
 RUN set -ex \
@@ -37,9 +37,9 @@ RUN set -ex \
 #
 # Prepare a TomEE container with empty webapps directory and start TomEE as unprivileged user
 #
-# Dockerfile: https://github.com/tomitribe/docker-tomee/blob/master/TomEE-9.0/jre11/webprofile/Dockerfile
-# inherits from https://github.com/docker-library/openjdk/blob/3ce4449d7f01afa6001a711e17cdd379b76848f8/11/jre/buster/Dockerfile
-FROM tomee:11-jre-9.0.0-M7-webprofile
+# Dockerfile: https://github.com/tomitribe/docker-tomee/blob/58883d3a23534dc5ee1bc6cee455cf797650d507/TomEE-8.0/jre8/webprofile/Dockerfile
+# inherits from https://github.com/docker-library/openjdk/blob/c2daf6399c18547284d96995c633b0eecefc608f/8/jre/buster/Dockerfile
+FROM tomee:8-jre-8.0.8-webprofile
 
 ENV PATH /usr/local/tomee/bin:$PATH
 

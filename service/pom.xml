@@ -44,7 +44,7 @@
 		<dependency>
 			<groupId>jakarta.platform</groupId>
 			<artifactId>jakarta.jakartaee-web-api</artifactId>
-			<version>9.1.0</version>
+			<version>8.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -72,14 +72,14 @@
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>7.0.1.Final</version>
+			<version>6.2.0.Final</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Required by org.hibernate.validator.hibernate-validator -->
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>jakarta.el</artifactId>
-			<version>4.0.2</version>
+			<version>3.0.4</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
