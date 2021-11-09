@@ -19,6 +19,11 @@ package de.ipb_halle.fasta_search_service.endpoint.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * POJO for fasta sequence search queries.
+ * 
+ * @author flange
+ */
 @XmlRootElement
 public class FastaSearchQuery {
 	private String querySequence;

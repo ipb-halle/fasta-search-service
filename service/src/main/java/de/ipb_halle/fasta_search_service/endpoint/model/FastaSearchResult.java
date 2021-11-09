@@ -17,13 +17,44 @@
  */
 package de.ipb_halle.fasta_search_service.endpoint.model;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.ipb_halle.fasta_search_service.fastaresult.FastaResult;
+
 /**
+ * POJO for search results, which the {@link FastaSearchEndpoint} endpoints
+ * return.
  * 
  * @author flange
  */
 @XmlRootElement
 public class FastaSearchResult {
+	private List<FastaResult> results;
+	private String programOutput;
 
+	public FastaSearchResult() {
+	}
+
+	public FastaSearchResult(List<FastaResult> results, String output) {
+		this.results = results;
+		this.programOutput = output;
+	}
+
+	public List<FastaResult> getResults() {
+		return results;
+	}
+
+	public void setResults(List<FastaResult> results) {
+		this.results = results;
+	}
+
+	public String getProgramOutput() {
+		return programOutput;
+	}
+
+	public void setProgramOutput(String programOutput) {
+		this.programOutput = programOutput;
+	}
 }

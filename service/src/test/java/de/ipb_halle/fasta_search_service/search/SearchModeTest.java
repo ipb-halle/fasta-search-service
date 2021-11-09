@@ -48,14 +48,14 @@ public class SearchModeTest {
 
 	@Test
 	public void test_getModeForSequenceTypes() {
-		assertEquals(PROTEIN_PROTEIN, SearchMode.getModeForSequenceTypes(PROTEIN, PROTEIN));
-		assertEquals(DNA_DNA, SearchMode.getModeForSequenceTypes(DNA, DNA));
-		assertEquals(DNA_PROTEIN, SearchMode.getModeForSequenceTypes(DNA, PROTEIN));
-		assertEquals(PROTEIN_DNA, SearchMode.getModeForSequenceTypes(PROTEIN, DNA));
+		assertEquals(PROTEIN_PROTEIN, SearchMode.getSearchModeForSequenceTypes(PROTEIN, PROTEIN));
+		assertEquals(DNA_DNA, SearchMode.getSearchModeForSequenceTypes(DNA, DNA));
+		assertEquals(DNA_PROTEIN, SearchMode.getSearchModeForSequenceTypes(DNA, PROTEIN));
+		assertEquals(PROTEIN_DNA, SearchMode.getSearchModeForSequenceTypes(PROTEIN, DNA));
 
-		assertNull(SearchMode.getModeForSequenceTypes(null, null));
-		assertNull(SearchMode.getModeForSequenceTypes(PROTEIN, null));
-		assertNull(SearchMode.getModeForSequenceTypes(null, PROTEIN));
+		assertNull(SearchMode.getSearchModeForSequenceTypes(null, null));
+		assertNull(SearchMode.getSearchModeForSequenceTypes(PROTEIN, null));
+		assertNull(SearchMode.getSearchModeForSequenceTypes(null, PROTEIN));
 	}
 
 	@Test

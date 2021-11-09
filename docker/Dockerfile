@@ -25,14 +25,20 @@ LABEL stage=fasta-search-service-builder
 
 RUN set -ex \
 	&& apt-get update \
-	&& apt-get -y install gcc make git libssl-dev libpq-dev \
+	&& apt-get -y install gcc make git libpq-dev libmariadb-dev \
 	&& mkdir -p /build \
 	&& cd /build \
 	&& git clone https://github.com/wrpearson/fasta36.git \
-	&& cd fasta36 \
+	&& cp -r fasta36 fasta36_postgresql \
+	&& mv fasta36 fasta36_mariadb \
+	&& cd /build/fasta36_postgresql \
 	&& git checkout 8036daa401eb5420202bd0d216d047a0cd2a61fe \
 	&& cd src \
-	&& make -f ../make/Makefile.linux_pgsql all
+	&& make -f ../make/Makefile.linux_pgsql all \
+	&& cd /build/fasta36_mariadb \
+	&& git checkout 8036daa401eb5420202bd0d216d047a0cd2a61fe \
+	&& cd src \
+	&& make -f ../make/Makefile.linux_mariadb all
 
 #
 # Prepare a TomEE container with empty webapps directory and start TomEE as unprivileged user
@@ -44,6 +50,8 @@ FROM tomee:8-jre-8.0.8-webprofile
 ENV PATH /usr/local/tomee/bin:$PATH
 
 RUN set -ex \
+	&& apt-get update \
+	&& apt-get -y install libpq-dev libmariadb-dev \
 	&& rm -r /usr/local/tomee/webapps/* \
 	&& groupadd tomee \
 	&& useradd -g tomee tomee \

@@ -15,21 +15,30 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.service;
+package de.ipb_halle.fasta_search_service.logger;
 
-import java.io.IOException;
+import java.util.logging.Logger;
 
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchRequest;
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchResult;
-import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
-import de.ipb_halle.fasta_search_service.search.LibraryFileFormat;
+import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.InjectionPoint;
 
 /**
- * 
+ * CDI-Producer of logger objects.
  * 
  * @author flange
  */
-public interface FastaSearchService {
-	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
-			throws InvalidFastaSearchRequestException, IOException, FastaResultParserException;
+/*
+ * Code from https://stackoverflow.com/a/21092326
+ */
+public class LoggerProducer {
+	/**
+	 * Produces a logger object.
+	 * 
+	 * @param p point wheren the logger object is to be injected
+	 * @return logger object
+	 */
+	@Produces
+	public Logger getLogger(InjectionPoint p) {
+		return Logger.getLogger(p.getClass().getCanonicalName());
+	}
 }

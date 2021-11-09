@@ -15,21 +15,36 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.service;
-
-import java.io.IOException;
-
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchRequest;
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchResult;
-import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
-import de.ipb_halle.fasta_search_service.search.LibraryFileFormat;
+package de.ipb_halle.fasta_search_service.search;
 
 /**
- * 
+ * Format of library files used by the fasta36 program suite.
  * 
  * @author flange
  */
-public interface FastaSearchService {
-	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
-			throws InvalidFastaSearchRequestException, IOException, FastaResultParserException;
+public enum LibraryFileFormat {
+	MYSQL(16, "/usr/local/fasta36_mariadb/bin"),
+	POSTGRES(17, "/usr/local/fasta36_postgresql/bin");
+
+	private final int number;
+	private final String binDirectory;
+
+	private LibraryFileFormat(int number, String binDirectory) {
+		this.number = number;
+		this.binDirectory = binDirectory;
+	}
+
+	/**
+	 * @return numerical ID of the library file format
+	 */
+	public int getNumber() {
+		return number;
+	}
+
+	/**
+	 * @return directory with the fasta36 binaries (absolute path)
+	 */
+	public String getBinDirectory() {
+		return binDirectory;
+	}
 }

@@ -27,8 +27,6 @@ import java.io.IOException;
  * @author flange
  */
 public abstract class SearchFactory {
-	private static final String FASTA_BIN_DIRECTORY = "/usr/local/fasta36/bin";
-
 	protected static final String PARAM_PROTEIN_QUERY = "-p";
 	protected static final String PARAM_NUCLEOTIDE_QUERY = "-n";
 	protected static final String PARAM_TRANSLATION_TABLE_FORMAT = "-t %d";
@@ -82,15 +80,15 @@ public abstract class SearchFactory {
 	 * @return output of of the program execution (typically {@code stdout})
 	 * @throws IOException
 	 */
-	public String execSearch(File queryFile, File libraryFile, int libraryFormat) throws IOException {
-		String program = FASTA_BIN_DIRECTORY + "/" + getProgramName();
+	public String execSearch(File queryFile, File libraryFile, LibraryFileFormat libraryFileFormat) throws IOException {
+		String program = libraryFileFormat.getBinDirectory() + "/" + getProgramName();
 
 		ProgramExecutor exec = programExecutorFactory.createNewInstance();
 		exec.addCommands(program, "-q", "-m", "10").addCommands(getParams())
 				.addCommands(String.format(PARAM_MAXRESULTS_FORMAT, maxResults, maxResults))
 				.addCommands(queryFile.getAbsolutePath())
 				.addCommands(libraryFile.getAbsolutePath())
-				.addCommands(Integer.toString(libraryFormat));
+				.addCommands(Integer.toString(libraryFileFormat.getNumber()));
 		return exec.execute();
 	}
 

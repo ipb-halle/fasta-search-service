@@ -17,31 +17,66 @@
  */
 package de.ipb_halle.fasta_search_service.endpoint;
 
+import java.io.IOException;
+import java.util.logging.Logger;
+
 import javax.inject.Inject;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchRequest;
 import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchResult;
+import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
+import de.ipb_halle.fasta_search_service.search.LibraryFileFormat;
 import de.ipb_halle.fasta_search_service.service.FastaSearchService;
+import de.ipb_halle.fasta_search_service.service.InvalidFastaSearchRequestException;
 
 /**
- * REST API endpoint for fasta library searches
+ * REST API endpoints for fasta library searches.
  * 
  * @author flange
  */
-@Path("/search")
+@Path("/")
 public class FastaSearchEndpoint {
 	@Inject
 	private FastaSearchService service;
 
+//	@Inject
+//	private Logger logger;
+
 	@POST
+	@Path("searchPostgres")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public FastaSearchResult search(FastaSearchRequest request) {
-		return service.search(request);
+	public Response searchPostgres(FastaSearchRequest request) {
+		return handleRequest(request, LibraryFileFormat.POSTGRES);
+	}
+
+	@POST
+	@Path("searchMariaDB")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Response searchMariaDB(FastaSearchRequest request) {
+		return handleRequest(request, LibraryFileFormat.MYSQL);
+	}
+
+	private Response handleRequest(FastaSearchRequest request, LibraryFileFormat format) {
+		try {
+			FastaSearchResult result = service.search(request, format);
+			return Response.ok(result).build();
+		} catch (InvalidFastaSearchRequestException e) {
+			throw new BadRequestException(e);
+		} catch (IOException | FastaResultParserException e) {
+			//logger.severe(ExceptionUtils.getStackTrace(e));
+			throw new InternalServerErrorException(e);
+		}
 	}
 }

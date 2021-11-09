@@ -56,7 +56,7 @@ public enum SearchMode {
 	 * @param sequenceLibraryType
 	 * @return matching item or {@code null} in case no match was found
 	 */
-	public static SearchMode getModeForSequenceTypes(SequenceType querySequenceType, SequenceType sequenceLibraryType) {
+	public static SearchMode getSearchModeForSequenceTypes(SequenceType querySequenceType, SequenceType sequenceLibraryType) {
 		for (SearchMode mode : values()) {
 			if (mode.querySequenceType.equals(querySequenceType)
 					&& mode.sequenceLibraryType.equals(sequenceLibraryType)) {

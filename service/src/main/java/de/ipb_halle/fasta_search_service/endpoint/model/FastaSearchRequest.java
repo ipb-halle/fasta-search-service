@@ -20,6 +20,7 @@ package de.ipb_halle.fasta_search_service.endpoint.model;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ * POJO for search requests to the {@link FastaSearchEndpoint} endpoints.
  * 
  * @author flange
  */

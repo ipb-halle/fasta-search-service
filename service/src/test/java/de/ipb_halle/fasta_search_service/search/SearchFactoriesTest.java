@@ -17,6 +17,8 @@
  */
 package de.ipb_halle.fasta_search_service.search;
 
+import static de.ipb_halle.fasta_search_service.search.LibraryFileFormat.MYSQL;
+import static de.ipb_halle.fasta_search_service.search.LibraryFileFormat.POSTGRES;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertArrayEquals;
@@ -107,12 +109,12 @@ public class SearchFactoriesTest {
 		SearchFactory factory = new DNADNASearchFactory.Builder().build();
 		addMocksToFactory(factory);
 
-		factory.execSearch(queryFile, libraryFile, 1);
+		factory.execSearch(queryFile, libraryFile, MYSQL);
 		assertThat(mockProgramExecutor.getCommandList(), hasItem("-d 50 -b 50"));
 
 		addMocksToFactory(factory);
 		assertSame(factory, factory.maxResults(1000));
-		factory.execSearch(queryFile, libraryFile, 1);
+		factory.execSearch(queryFile, libraryFile, POSTGRES);
 		assertThat(mockProgramExecutor.getCommandList(), hasItem("-d 1000 -b 1000"));
 	}
 
@@ -123,27 +125,27 @@ public class SearchFactoriesTest {
 
 		factory = new DNADNASearchFactory.Builder().build();
 		addMocksToFactory(factory);
-		expected = "/usr/local/fasta36/bin/fasta36 -q -m 10 -n -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
-				+ libraryFile.getAbsolutePath() + " 100";
-		assertEquals(expected, factory.execSearch(queryFile, libraryFile, 100));
+		expected = "/usr/local/fasta36_mariadb/bin/fasta36 -q -m 10 -n -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
+				+ libraryFile.getAbsolutePath() + " 16";
+		assertEquals(expected, factory.execSearch(queryFile, libraryFile, MYSQL));
 
 		factory = new DNAProteinSearchFactory.Builder().build();
 		addMocksToFactory(factory);
-		expected = "/usr/local/fasta36/bin/fastx36 -q -m 10 -n -t 1 -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
-				+ libraryFile.getAbsolutePath() + " 100";
-		assertEquals(expected, factory.execSearch(queryFile, libraryFile, 100));
+		expected = "/usr/local/fasta36_postgresql/bin/fastx36 -q -m 10 -n -t 1 -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
+				+ libraryFile.getAbsolutePath() + " 17";
+		assertEquals(expected, factory.execSearch(queryFile, libraryFile, POSTGRES));
 
 		factory = new ProteinDNASearchFactory.Builder().build();
 		addMocksToFactory(factory);
-		expected = "/usr/local/fasta36/bin/tfastx36 -q -m 10 -p -t 1 -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
-				+ libraryFile.getAbsolutePath() + " 100";
-		assertEquals(expected, factory.execSearch(queryFile, libraryFile, 100));
+		expected = "/usr/local/fasta36_mariadb/bin/tfastx36 -q -m 10 -p -t 1 -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
+				+ libraryFile.getAbsolutePath() + " 16";
+		assertEquals(expected, factory.execSearch(queryFile, libraryFile, MYSQL));
 
 		factory = new ProteinProteinSearchFactory.Builder().build();
 		addMocksToFactory(factory);
-		expected = "/usr/local/fasta36/bin/fasta36 -q -m 10 -p -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
-				+ libraryFile.getAbsolutePath() + " 100";
-		assertEquals(expected, factory.execSearch(queryFile, libraryFile, 100));
+		expected = "/usr/local/fasta36_postgresql/bin/fasta36 -q -m 10 -p -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
+				+ libraryFile.getAbsolutePath() + " 17";
+		assertEquals(expected, factory.execSearch(queryFile, libraryFile, POSTGRES));
 	}
 
 	private void addMocksToFactory(SearchFactory factory) {

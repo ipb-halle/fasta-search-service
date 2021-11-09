@@ -17,19 +17,32 @@
  */
 package de.ipb_halle.fasta_search_service.endpoint;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.ejb.Stateless;
 
 import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchRequest;
 import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchResult;
+import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
+import de.ipb_halle.fasta_search_service.search.LibraryFileFormat;
 import de.ipb_halle.fasta_search_service.service.FastaSearchService;
+import de.ipb_halle.fasta_search_service.service.InvalidFastaSearchRequestException;
 
 /**
  * @author flange
  */
 @Stateless
 public class FastaSearchServiceMockImpl implements FastaSearchService {
+	private FastaSearchResult response = new FastaSearchResult(new ArrayList<>(), "");
+
 	@Override
-	public FastaSearchResult search(FastaSearchRequest request) {
-		return new FastaSearchResult();
+	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
+			throws InvalidFastaSearchRequestException, IOException, FastaResultParserException {
+		return response;
+	}
+
+	public void setResponse(FastaSearchResult response) {
+		this.response = response;
 	}
 }

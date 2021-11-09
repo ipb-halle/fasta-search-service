@@ -28,11 +28,15 @@ import org.apache.openejb.junit.ApplicationComposer;
 import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.EnableServices;
 import org.apache.openejb.testing.Module;
+import org.apache.openejb.testing.RandomPort;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchQuery;
 import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchRequest;
+import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchResult;
+import de.ipb_halle.fasta_search_service.logger.LoggerProducer;
 
 /**
  * @author flange
@@ -40,30 +44,59 @@ import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchRequest;
 @EnableServices(value = "jaxrs", httpDebug = true)
 @RunWith(ApplicationComposer.class)
 public class FastaSearchEndpointTest {
+	@RandomPort("http")
+	private int port;
+
+	private String uri;
+	private FastaSearchRequest request;
+	private Client client;
+
 	@Module
-    @Classes({FastaSearchEndpoint.class, FastaSearchServiceMockImpl.class})
+    @Classes({FastaSearchEndpoint.class, FastaSearchServiceMockImpl.class, LoggerProducer.class})
     public WebApp app() {
         return new WebApp().contextRoot("test");
     }
 
-	@Test
-	public void test() {
+	@Before
+	public void init() {
+		uri = "http://localhost:" + port + "/test";
+
 		FastaSearchQuery query = new FastaSearchQuery();
 		query.setQuerySequence("AGCTGA");
 		query.setQuerySequenceType("DNA");
 		query.setLibrarySequenceType("PROTEIN");
 		query.setTranslationTable(1);
 		query.setMaxResults(10);
-		FastaSearchRequest request = new FastaSearchRequest();
+		request = new FastaSearchRequest();
 		request.setLibraryFile("mylibraryfile");
 		request.setSearchQuery(query);
 
-		Client client = ClientBuilder.newClient();
-		Response response = client.target("http://localhost:4204/test").path("search").request()
+		client = ClientBuilder.newClient();
+	}
+
+	/*@Test
+	public void test_postJsonGetJson() {
+	}
+	
+	@Test
+	public void test_postJsonGetXml() {
+	}
+	
+	@Test
+	public void test_postXmlGetJson() {
+	}
+	
+	@Test
+	public void test_postXmlGetXml() {
+	}*/
+
+	@Test
+	public void test() {
+		Response response = client.target(uri).path("searchPostgres").request()
 				.accept(MediaType.APPLICATION_JSON).post(Entity.xml(request));
 
 		System.out.println(response.toString());
-		System.out.println(response.readEntity(FastaSearchRequest.class).toString());
+		System.out.println(response.readEntity(FastaSearchResult.class).toString());
 		client.close();
 	}
 }

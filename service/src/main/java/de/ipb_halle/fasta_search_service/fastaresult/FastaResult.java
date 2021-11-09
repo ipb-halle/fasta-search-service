@@ -19,6 +19,7 @@ package de.ipb_halle.fasta_search_service.fastaresult;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Data class holding information of an alignment hit of a fasta search.
@@ -28,6 +29,7 @@ import javax.validation.constraints.NotNull;
  * 
  * @author flange
  */
+@XmlRootElement
 public class FastaResult {
 	/*
 	 * fa_frame / sw_frame / fx_frame / tx_frame - frame direction
