@@ -87,8 +87,7 @@ public abstract class SearchFactory {
 		exec.addCommands(program, "-q", "-m", "10").addCommands(getParams())
 				.addCommands(String.format(PARAM_MAXRESULTS_FORMAT, maxResults, maxResults))
 				.addCommands(queryFile.getAbsolutePath())
-				.addCommands(libraryFile.getAbsolutePath())
-				.addCommands(Integer.toString(libraryFileFormat.getNumber()));
+				.addCommands(libraryFile.getAbsolutePath() + " " + Integer.toString(libraryFileFormat.getNumber()));
 		return exec.execute();
 	}
 

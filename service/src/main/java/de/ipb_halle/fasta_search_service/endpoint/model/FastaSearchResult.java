@@ -57,4 +57,12 @@ public class FastaSearchResult {
 	public void setProgramOutput(String programOutput) {
 		this.programOutput = programOutput;
 	}
+
+	@Override
+	public String toString() {
+		return "FastaSearchResult ["
+				+ "\n  results=" + results
+				+ "\n, programOutput=" + programOutput
+				+ "\n]";
+	}
 }
