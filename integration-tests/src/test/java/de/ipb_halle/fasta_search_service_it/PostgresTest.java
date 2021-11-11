@@ -17,15 +17,17 @@
  */
 package de.ipb_halle.fasta_search_service_it;
 
+import static org.junit.Assert.assertEquals;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,22 +51,25 @@ public class PostgresTest {
 	private static final String password = "testpassword";
 	private static final String initScript = "init.sql";
 
-	private Logger logger = LoggerFactory.getLogger(PostgresTest.class);
-	private Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(logger).withSeparateOutputStreams();
+	private static String dnaLibraryFile = TestUtils.getLibraryFile("db", 5432, dbName, user, password, "sequences", "DNA");
+	private static String proteinLibraryFile = TestUtils.getLibraryFile("db", 5432, dbName, user, password, "sequences",
+			"PROTEIN");
+
+	private static Logger logger = LoggerFactory.getLogger(PostgresTest.class);
+	private static Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(logger).withSeparateOutputStreams();
 
 	private String uri;
-	private FastaSearchRequest request;
 	private Client client;
 
-	private Network network = Network.newNetwork();
+	private static Network network = Network.newNetwork();
 
-	@Rule
-	public PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(postgresImageName).withDatabaseName(dbName)
+	@ClassRule
+	public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(postgresImageName).withDatabaseName(dbName)
 			.withUsername(user).withPassword(password).withInitScript(initScript).withNetwork(network)
 			.withNetworkAliases("db").withLogConsumer(logConsumer);
 
-	@Rule
-	public GenericContainer<?> fastaSearchContainer = new GenericContainer<>(TestUtils.getTestbuildImage())
+	@ClassRule
+	public static GenericContainer<?> fastaSearchContainer = new GenericContainer<>(TestUtils.getTestbuildImage())
 			.withExposedPorts(8080).withNetwork(network).withLogConsumer(logConsumer);
 
 	@Before
@@ -80,22 +85,119 @@ public class PostgresTest {
 	}
 
 	@Test
-	public void test_DNA() {
-		String libraryFile = TestUtils.getLibraryFile("db", 5432, dbName, user, password, "DNA");
-
+	public void test_DNASearchInDNALibrary() {
 		FastaSearchQuery query = new FastaSearchQuery();
+		/*
+		 * example from fasta-search-service/service/src/test/resources/de/ipb_halle/
+		 * fasta_search_service/fastaresult/query8.fasta
+		 */
 		query.setQuerySequence(
 				"CCTGCCGATCTGGTTAACTACAATCCGATTGCCGAAAAACACGTCAACGGCACAATGACGCTGGCAGAACTGAGCGCGGCCGCTTTGCAGTACAGCGAC");
-		query.setQuerySequenceType("DNA");
+		query.setQuerySequenceType("dna");
 		query.setLibrarySequenceType("DNA");
-		request = new FastaSearchRequest();
+		FastaSearchRequest request = new FastaSearchRequest();
 		request.setSearchQuery(query);
-		request.setLibraryFile(libraryFile);
+		request.setLibraryFile(dnaLibraryFile);
 
 		Response response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.xml(request));
 
-		System.out.println(response.getStatus());
-		System.out.println(response.readEntity(FastaSearchResult.class).toString());
+		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
+		FastaSearchResult searchResult = response.readEntity(FastaSearchResult.class);
+		FastaSearchResultAssertions.assertDNASearchInDNALibraryResult(searchResult);
+	}
+
+	@Test
+	public void test_DNASearchInProteinLibrary() {
+		FastaSearchQuery query = new FastaSearchQuery();
+		/*
+		 * example from fasta-search-service/service/src/test/resources/de/ipb_halle/
+		 * fasta_search_service/fastaresult/query9.fasta
+		 */
+		query.setQuerySequence(
+				"CCTGCCGATCTGGTTAACTACAATCCGATTGCCGAAAAACACGTCAACGGCACAATGACGCTGGCAGAACTGAGCGCGGCCGCTTTGCAGTACAGCGAC");
+		query.setQuerySequenceType("DNA");
+		query.setLibrarySequenceType("protein");
+		FastaSearchRequest request = new FastaSearchRequest();
+		request.setSearchQuery(query);
+		request.setLibraryFile(proteinLibraryFile);
+
+		Response response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_JSON)
+				.post(Entity.xml(request));
+
+		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
+		FastaSearchResult searchResult = response.readEntity(FastaSearchResult.class);
+		FastaSearchResultAssertions.assertDNASearchInProteinLibraryResult(searchResult);
+	}
+
+	@Test
+	public void test_proteinSearchInProteinLibrary() {
+		FastaSearchQuery query = new FastaSearchQuery();
+		/*
+		 * example from fasta-search-service/service/src/test/resources/de/ipb_halle/
+		 * fasta_search_service/fastaresult/query7.fasta
+		 */
+		query.setQuerySequence(
+				"SAVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA");
+		query.setQuerySequenceType("protein");
+		query.setLibrarySequenceType("PROTEIN");
+		FastaSearchRequest request = new FastaSearchRequest();
+		request.setSearchQuery(query);
+		request.setLibraryFile(proteinLibraryFile);
+
+		Response response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_XML)
+				.post(Entity.json(request));
+
+		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
+		FastaSearchResult searchResult = response.readEntity(FastaSearchResult.class);
+		FastaSearchResultAssertions.assertProteinSearchInProteinLibraryResult(searchResult);
+	}
+
+	@Test
+	public void test_proteinSearchInDNALibrary() {
+		FastaSearchQuery query = new FastaSearchQuery();
+		/*
+		 * example from fasta-search-service/service/src/test/resources/de/ipb_halle/
+		 * fasta_search_service/fastaresult/query11.fasta
+		 */
+		query.setQuerySequence(
+				"SAVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA");
+		query.setQuerySequenceType("PROTEIN");
+		query.setLibrarySequenceType("dna");
+		FastaSearchRequest request = new FastaSearchRequest();
+		request.setSearchQuery(query);
+		request.setLibraryFile(dnaLibraryFile);
+
+		Response response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_JSON)
+				.post(Entity.xml(request));
+
+		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
+		FastaSearchResult searchResult = response.readEntity(FastaSearchResult.class);
+		FastaSearchResultAssertions.assertProteinSearchInDNALibraryResult(searchResult);
+	}
+
+	@Test
+	public void test_maxResults() {
+		// test >0, 0 and <0
+	}
+
+	@Test
+	public void test_translationTable() {
+
+	}
+
+	@Test
+	public void test_wrongDatabase() {
+
+	}
+
+	@Test
+	public void test_wrongTable() {
+
+	}
+
+	@Test
+	public void test_wrongDBCredentials() {
+
 	}
 }

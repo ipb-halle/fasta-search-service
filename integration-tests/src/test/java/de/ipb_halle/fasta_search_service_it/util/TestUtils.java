@@ -31,21 +31,23 @@ public class TestUtils {
 	}
 
 	private static final String headerFormat = "%s:%d %s %s %s";
-	private static final String selectAllSequencesFormat = "SELECT id,sequence FROM sequences WHERE sequencetype = '%s';";
+	private static final String selectAllSequencesFormat = "SELECT id,sequence FROM %s WHERE sequencetype = '%s';";
+	private static final String selectDescriptionByIdFormat = "SELECT description FROM %s WHERE id=#;";
+	private static final String selectSequenceByIdFormat = "SELECT sequence FROM %s WHERE id=#;";
 
 	public static String getLibraryFile(String hostname, int port, String dbName, String user, String password,
-			String sequenceType) {
+			String tableName, String sequenceType) {
 		StringBuilder sb = new StringBuilder(256);
 
 		sb.append(String.format(headerFormat, hostname, port, dbName, user, password));
 		sb.append("\n");
 		sb.append("DO SELECT 1;");
 		sb.append("\n");
-		sb.append(String.format(selectAllSequencesFormat, sequenceType));
+		sb.append(String.format(selectAllSequencesFormat, tableName, sequenceType));
 		sb.append("\n");
-		sb.append("SELECT description FROM sequences WHERE id=#;");
+		sb.append(String.format(selectDescriptionByIdFormat, tableName));
 		sb.append("\n");
-		sb.append("SELECT sequence FROM sequences WHERE id=#;");
+		sb.append(String.format(selectSequenceByIdFormat, tableName));
 
 		return sb.toString();
 	}

@@ -27,12 +27,13 @@ import org.junit.Test;
 public class TestUtilsTest {
 	@Test
 	public void test_getLibraryFile() {
-		String libraryFile = TestUtils.getLibraryFile("dbHostname", 5432, "dbName", "dbUser", "dbPassword", "XYZ");
+		String libraryFile = TestUtils.getLibraryFile("dbHostname", 5432, "dbName", "dbUser", "dbPassword", "sequences", "XYZ");
 		String expected = ""
 				+ "dbHostname:5432 dbName dbUser dbPassword\n"
 				+ "DO SELECT 1;\n"
 				+ "SELECT id,sequence FROM sequences WHERE sequencetype = 'XYZ';\n"
-				+ "SELECT description FROM sequences WHERE id=#;\n" + "SELECT sequence FROM sequences WHERE id=#;";
+				+ "SELECT description FROM sequences WHERE id=#;\n"
+				+ "SELECT sequence FROM sequences WHERE id=#;";
 		assertEquals(expected, libraryFile);
 	}
 }
