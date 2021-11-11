@@ -65,6 +65,27 @@
 			<artifactId>openejb-cxf-rs</artifactId>
 			<version>${tomee.version}</version>
 			<scope>test</scope>
+			<exclusions>
+				<!-- We like to use a different logger and JUL is preferred by SLF4J. -->
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-jdk14</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.32</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.6</version>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- docker containers -->
@@ -90,14 +111,6 @@
 			<groupId>org.testcontainers</groupId>
 			<artifactId>mysql</artifactId>
 			<version>1.16.2</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- logging for testcontainers -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.32</version>
 			<scope>test</scope>
 		</dependency>
 

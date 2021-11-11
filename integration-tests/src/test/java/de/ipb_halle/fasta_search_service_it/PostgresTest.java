@@ -27,9 +27,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
+
 import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchQuery;
 import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchRequest;
 import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchResult;
@@ -45,6 +49,9 @@ public class PostgresTest {
 	private static final String password = "testpassword";
 	private static final String initScript = "init.sql";
 
+	private Logger logger = LoggerFactory.getLogger(PostgresTest.class);
+	private Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(logger).withSeparateOutputStreams();
+
 	private String uri;
 	private FastaSearchRequest request;
 	private Client client;
@@ -54,11 +61,11 @@ public class PostgresTest {
 	@Rule
 	public PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(postgresImageName).withDatabaseName(dbName)
 			.withUsername(user).withPassword(password).withInitScript(initScript).withNetwork(network)
-			.withNetworkAliases("db");
+			.withNetworkAliases("db").withLogConsumer(logConsumer);
 
 	@Rule
 	public GenericContainer<?> fastaSearchContainer = new GenericContainer<>(TestUtils.getTestbuildImage())
-			.withExposedPorts(8080).withNetwork(network);
+			.withExposedPorts(8080).withNetwork(network).withLogConsumer(logConsumer);
 
 	@Before
 	public void init() {

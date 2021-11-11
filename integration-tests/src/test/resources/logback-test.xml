@@ -10,8 +10,8 @@
     </root>
 
     <logger name="org.testcontainers" level="DEBUG"/>
+    <logger name="com.github.dockerjava" level="WARN"/>
 
-    <logger name="com.github.dockerjava" level="DEBUG"/>
-    <logger name="org.zeroturnaround.exec" level="DEBUG"/>
-    <logger name="org.testcontainers.shaded" level="DEBUG"/>
+    <!-- see https://github.com/testcontainers/testcontainers-java/issues/3093#issuecomment-927086344 -->
+    <logger name="com.github.dockerjava.api.command.BuildImageResultCallback" level="DEBUG"/>
 </configuration>
