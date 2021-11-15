@@ -39,7 +39,7 @@ public class FastaSearchResultAssertions {
 		assertFalse(searchResult.getProgramOutput().isEmpty());
 
 		List<FastaResult> fastaResults = searchResult.getResults();
-		// this is flaky, because the fasta algorithm can deliver different number of results in each run
+		// this is flaky, because the fasta algorithm can deliver a different number of results in each run
 //		assertEquals(11, fastaResults.size());
 
 		// copy-paste from FastaResultParserTest.testParseResults8()

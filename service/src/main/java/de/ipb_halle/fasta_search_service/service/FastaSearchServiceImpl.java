@@ -22,7 +22,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.ejb.Stateless;
 import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchQuery;
 import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchRequest;
@@ -46,7 +49,8 @@ import de.ipb_halle.fasta_search_service.util.FastaFileFormatUtils;
 public class FastaSearchServiceImpl implements FastaSearchService {
 	@Override
 	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
-			throws InvalidFastaSearchRequestException, IOException, FastaResultParserException, ProgramExecutionException {
+			throws InvalidFastaSearchRequestException, IOException, FastaResultParserException,
+			ProgramExecutionException {
 		FastaSearchQuery searchQuery = request.getSearchQuery();
 		String querySequence = FastaFileFormatUtils.toFastaFileFormat(searchQuery.getQuerySequence());
 
@@ -127,6 +131,9 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 
 		String output = fastaProgramOutput.getStdout();
 		List<FastaResult> parsedResults = new FastaResultParser(new StringReader(output)).parse();
+
+		parsedResults = sortResultsListAndApplyMaxResults(parsedResults, searchQuery.getMaxResults());
+
 		return new FastaSearchResult(parsedResults, output);
 	}
 
@@ -153,5 +160,20 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 			throw new ProgramExecutionException("fasta program returned with exit status " + exitValue
 					+ "\nError log:\n" + fastaProgramOutput.getStderr());
 		}
+	}
+
+	/**
+	 * Sort by E()-value, then limit the number of results to maxResults.
+	 * 
+	 * Why is this needed even though we limit the results via parameters of the
+	 * fasta programs? In some cases, fasta supplies more alignment results than it
+	 * is told to - might be a bug, or a feature?
+	 */
+	private List<FastaResult> sortResultsListAndApplyMaxResults(List<FastaResult> parsedResults, int maxResults) {
+		if (maxResults < 1) {
+			return parsedResults;
+		}
+		return parsedResults.stream().sorted(Comparator.comparing(result -> result.getExpectationValue()))
+				.limit(maxResults).collect(Collectors.toList());
 	}
 }

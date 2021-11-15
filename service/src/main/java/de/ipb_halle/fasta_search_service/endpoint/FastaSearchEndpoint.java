@@ -77,7 +77,7 @@ public class FastaSearchEndpoint {
 			throw new BadRequestException(e);
 		} catch (IOException | FastaResultParserException | ProgramExecutionException e) {
 			//logger.severe(ExceptionUtils.getStackTrace(e));
-			throw new InternalServerErrorException(e);
+			return Response.serverError().entity(e.getMessage()).build();
 		}
 	}
 }
