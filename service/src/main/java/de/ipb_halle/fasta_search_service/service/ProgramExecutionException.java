@@ -17,19 +17,14 @@
  */
 package de.ipb_halle.fasta_search_service.service;
 
-import java.io.IOException;
-
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchRequest;
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchResult;
-import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
-import de.ipb_halle.fasta_search_service.search.LibraryFileFormat;
-
 /**
- * 
  * 
  * @author flange
  */
-public interface FastaSearchService {
-	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
-			throws InvalidFastaSearchRequestException, IOException, FastaResultParserException, ProgramExecutionException;
+public class ProgramExecutionException extends Exception {
+	private static final long serialVersionUID = 1L;
+
+	public ProgramExecutionException(String message) {
+		super(message);
+	}
 }

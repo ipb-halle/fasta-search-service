@@ -127,32 +127,32 @@ public class SearchFactoriesTest {
 		addMocksToFactory(factory);
 		expected = "/usr/local/fasta36_mariadb/bin/fasta36 -q -m 10 -n -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
 				+ libraryFile.getAbsolutePath() + " 16";
-		assertEquals(expected, factory.execSearch(queryFile, libraryFile, MYSQL));
+		assertEquals(expected, factory.execSearch(queryFile, libraryFile, MYSQL).getStdout());
 
 		factory = new DNAProteinSearchFactory.Builder().build();
 		addMocksToFactory(factory);
 		expected = "/usr/local/fasta36_postgresql/bin/fastx36 -q -m 10 -n -t 1 -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
 				+ libraryFile.getAbsolutePath() + " 17";
-		assertEquals(expected, factory.execSearch(queryFile, libraryFile, POSTGRES));
+		assertEquals(expected, factory.execSearch(queryFile, libraryFile, POSTGRES).getStdout());
 
 		factory = new ProteinDNASearchFactory.Builder().build();
 		addMocksToFactory(factory);
 		expected = "/usr/local/fasta36_mariadb/bin/tfastx36 -q -m 10 -p -t 1 -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
 				+ libraryFile.getAbsolutePath() + " 16";
-		assertEquals(expected, factory.execSearch(queryFile, libraryFile, MYSQL));
+		assertEquals(expected, factory.execSearch(queryFile, libraryFile, MYSQL).getStdout());
 
 		factory = new ProteinProteinSearchFactory.Builder().build();
 		addMocksToFactory(factory);
 		expected = "/usr/local/fasta36_postgresql/bin/fasta36 -q -m 10 -p -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
 				+ libraryFile.getAbsolutePath() + " 17";
-		assertEquals(expected, factory.execSearch(queryFile, libraryFile, POSTGRES));
+		assertEquals(expected, factory.execSearch(queryFile, libraryFile, POSTGRES).getStdout());
 	}
 
 	private void addMocksToFactory(SearchFactory factory) {
 		mockProgramExecutor = new ProgramExecutor() {
 			@Override
-			public String execute() throws IOException {
-				return String.join(" ", getCommandList());
+			public ProgramOutput execute() throws IOException {
+				return new ProgramOutput(0, String.join(" ", getCommandList()), "");
 			}
 		};
 		factory.setProgramExecutorFactory(new ProgramExecutorFactory() {

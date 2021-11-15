@@ -30,6 +30,8 @@ public class FastaFileFormatUtilsTest {
 	public void test_inFastaFormat() {
 		String input, expected;
 
+		assertEquals(null, toFastaFileFormat(null));
+
 		input = "ABCDEF";
 		expected = ">query\nABCDEF";
 		assertEquals(expected, toFastaFileFormat(input));

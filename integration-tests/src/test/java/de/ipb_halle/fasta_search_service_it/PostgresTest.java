@@ -198,6 +198,26 @@ public class PostgresTest {
 
 	@Test
 	public void test_wrongDBCredentials() {
+		FastaSearchQuery query = new FastaSearchQuery();
+		query.setQuerySequence(
+				"SAVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA");
+		query.setQuerySequenceType("PROTEIN");
+		query.setLibrarySequenceType("PROTEIN");
+		FastaSearchRequest request = new FastaSearchRequest();
+		request.setSearchQuery(query);
 
+		String libraryFile = TestUtils.getLibraryFile("db", 5432, dbName, "wrongUser", password, "sequences",
+				"PROTEIN");
+		request.setLibraryFile(libraryFile);
+		Response response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_JSON)
+				.post(Entity.xml(request));
+		assertEquals(Status.INTERNAL_SERVER_ERROR, Status.fromStatusCode(response.getStatus()));
+
+		libraryFile = TestUtils.getLibraryFile("db", 5432, dbName, user, "wrongPassword", "sequences",
+				"PROTEIN");
+		request.setLibraryFile(libraryFile);
+		response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_JSON)
+				.post(Entity.xml(request));
+		assertEquals(Status.INTERNAL_SERVER_ERROR, Status.fromStatusCode(response.getStatus()));
 	}
 }

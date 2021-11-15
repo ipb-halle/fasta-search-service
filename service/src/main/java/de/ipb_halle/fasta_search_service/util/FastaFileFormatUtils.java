@@ -37,10 +37,12 @@ public class FastaFileFormatUtils {
 	 * if necessary.
 	 * 
 	 * @param input
-	 * @return input in FASTA file format
+	 * @return input in FASTA file format, or {@code null} if the input was {@code null}
 	 */
 	public static String toFastaFileFormat(String input) {
-		if (isInFastaFormat(input)) {
+		if (input == null) {
+			return null;
+		} else if (isInFastaFormat(input)) {
 			return input;
 		} else {
 			return withFastaHeader(input);

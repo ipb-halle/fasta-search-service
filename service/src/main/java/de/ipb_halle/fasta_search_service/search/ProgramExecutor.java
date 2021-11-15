@@ -19,6 +19,7 @@ package de.ipb_halle.fasta_search_service.search;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,15 +52,29 @@ public class ProgramExecutor {
 	/**
 	 * Execute a process according to the enqueued commands.
 	 * 
-	 * @return output of of the program execution (typically {@code stdout})
+	 * @return output of the program execution
 	 * @throws IOException
 	 */
-	public String execute() throws IOException {
+	public ProgramOutput execute() throws IOException {
 		ProcessBuilder builder = new ProcessBuilder(commandList);
 		Process process = builder.start();
 
+		try {
+			process.waitFor();
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+
+		String stdout = inputStreamToString(process.getInputStream());
+		String stderr = inputStreamToString(process.getErrorStream());
+		int exitValue = process.exitValue();
+
+		return new ProgramOutput(exitValue, stdout, stderr);
+	}
+
+	private String inputStreamToString(InputStream in) throws IOException {
 		StringJoiner sj = new StringJoiner("\n");
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				sj.add(line);

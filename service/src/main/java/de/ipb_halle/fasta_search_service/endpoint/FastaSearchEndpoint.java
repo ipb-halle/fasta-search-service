@@ -38,6 +38,7 @@ import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
 import de.ipb_halle.fasta_search_service.search.LibraryFileFormat;
 import de.ipb_halle.fasta_search_service.service.FastaSearchService;
 import de.ipb_halle.fasta_search_service.service.InvalidFastaSearchRequestException;
+import de.ipb_halle.fasta_search_service.service.ProgramExecutionException;
 
 /**
  * REST API endpoints for fasta library searches.
@@ -74,7 +75,7 @@ public class FastaSearchEndpoint {
 			return Response.ok(result).build();
 		} catch (InvalidFastaSearchRequestException e) {
 			throw new BadRequestException(e);
-		} catch (IOException | FastaResultParserException e) {
+		} catch (IOException | FastaResultParserException | ProgramExecutionException e) {
 			//logger.severe(ExceptionUtils.getStackTrace(e));
 			throw new InternalServerErrorException(e);
 		}

@@ -76,11 +76,11 @@ public abstract class SearchFactory {
 	 * 
 	 * @param queryFile
 	 * @param libraryFile
-	 * @param libraryFormat numeric of the library format - see the <a href="https://fasta.bioch.virginia.edu/wrp_fasta/fasta_guide.pdf">fasta guide</a> (chapter 3.5) for details
-	 * @return output of of the program execution (typically {@code stdout})
+	 * @param libraryFileFormat library format
+	 * @return output of of the program execution
 	 * @throws IOException
 	 */
-	public String execSearch(File queryFile, File libraryFile, LibraryFileFormat libraryFileFormat) throws IOException {
+	public ProgramOutput execSearch(File queryFile, File libraryFile, LibraryFileFormat libraryFileFormat) throws IOException {
 		String program = libraryFileFormat.getBinDirectory() + "/" + getProgramName();
 
 		ProgramExecutor exec = programExecutorFactory.createNewInstance();

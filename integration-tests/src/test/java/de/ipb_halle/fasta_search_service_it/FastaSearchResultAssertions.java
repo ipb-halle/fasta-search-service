@@ -39,10 +39,11 @@ public class FastaSearchResultAssertions {
 		assertFalse(searchResult.getProgramOutput().isEmpty());
 
 		List<FastaResult> fastaResults = searchResult.getResults();
-//		assertEquals(11, fastaResults.size()); // this is flaky
-		FastaResult result = fastaResults.get(0);
+		// this is flaky, because the fasta algorithm can deliver different number of results in each run
+//		assertEquals(11, fastaResults.size());
 
 		// copy-paste from FastaResultParserTest.testParseResults8()
+		FastaResult result = fastaResults.get(0);
 		assertEquals(Frame.FORWARD, result.getFrame());
 		assertEquals(0, result.getSmithWatermanScore());
 		assertEquals(99, result.getOverlap());
@@ -73,7 +74,7 @@ public class FastaSearchResultAssertions {
 
 		List<FastaResult> fastaResults = searchResult.getResults();
 
-		// copy-paste from FastaResultParserTest.testParseResults8()
+		// copy-paste from FastaResultParserTest.testParseResults9()
 		FastaResult result = fastaResults.get(4);
 		assertEquals(Frame.FORWARD, result.getFrame());
 		assertEquals(26, result.getOverlap());
@@ -125,7 +126,7 @@ public class FastaSearchResultAssertions {
 		assertFalse(searchResult.getProgramOutput().isEmpty());
 
 		List<FastaResult> fastaResults = searchResult.getResults();
-		System.out.println(searchResult.getProgramOutput());
+
 		FastaResult result = fastaResults.get(0);
 		assertEquals(Frame.FORWARD, result.getFrame());
 		assertEquals(50, result.getOverlap());

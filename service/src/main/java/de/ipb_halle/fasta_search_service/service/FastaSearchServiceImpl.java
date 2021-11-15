@@ -21,10 +21,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
-
 import javax.ejb.Stateless;
-
 import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchQuery;
 import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchRequest;
 import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchResult;
@@ -32,6 +31,7 @@ import de.ipb_halle.fasta_search_service.fastaresult.FastaResult;
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParser;
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
 import de.ipb_halle.fasta_search_service.search.LibraryFileFormat;
+import de.ipb_halle.fasta_search_service.search.ProgramOutput;
 import de.ipb_halle.fasta_search_service.search.SearchFactory;
 import de.ipb_halle.fasta_search_service.search.SearchMode;
 import de.ipb_halle.fasta_search_service.search.SequenceType;
@@ -46,9 +46,13 @@ import de.ipb_halle.fasta_search_service.util.FastaFileFormatUtils;
 public class FastaSearchServiceImpl implements FastaSearchService {
 	@Override
 	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
-			throws InvalidFastaSearchRequestException, IOException, FastaResultParserException {
+			throws InvalidFastaSearchRequestException, IOException, FastaResultParserException, ProgramExecutionException {
 		FastaSearchQuery searchQuery = request.getSearchQuery();
 		String querySequence = FastaFileFormatUtils.toFastaFileFormat(searchQuery.getQuerySequence());
+
+		if (querySequence == null) {
+			return emptyResult();
+		}
 
 		FastaSearchResult result = null;
 		File querySequenceFile = null;
@@ -72,6 +76,10 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 		}
 
 		return result;
+	}
+
+	private FastaSearchResult emptyResult() {
+		return new FastaSearchResult(new ArrayList<>(), "");
 	}
 
 	private File createQuerySequenceFile(String querySequence) throws IOException {
@@ -103,22 +111,26 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 	}
 
 	private SearchMode determineSearchMode(String querySequenceTypeAsString, String librarySequenceTypeAsString) {
-		SequenceType querySequenceType = SequenceType.valueOf(querySequenceTypeAsString);
-		SequenceType librarySequenceType = SequenceType.valueOf(librarySequenceTypeAsString);
+		SequenceType querySequenceType = SequenceType.valueOf(querySequenceTypeAsString.toUpperCase());
+		SequenceType librarySequenceType = SequenceType.valueOf(librarySequenceTypeAsString.toUpperCase());
 
 		return SearchMode.getSearchModeForSequenceTypes(querySequenceType, librarySequenceType);
 	}
 
 	private FastaSearchResult execSearchAndParseResults(File libraryFile, LibraryFileFormat format,
 			File querySequenceFile, SearchMode searchMode, FastaSearchQuery searchQuery)
-			throws IOException, FastaResultParserException {
-		String fastaProgramOutput = execFastaProgram(libraryFile, format, querySequenceFile, searchMode, searchQuery);
+			throws IOException, FastaResultParserException, ProgramExecutionException {
+		ProgramOutput fastaProgramOutput = execFastaProgram(libraryFile, format, querySequenceFile, searchMode,
+				searchQuery);
 
-		List<FastaResult> parsedResults = new FastaResultParser(new StringReader(fastaProgramOutput)).parse();
-		return new FastaSearchResult(parsedResults, fastaProgramOutput);
+		checkForErrors(fastaProgramOutput);
+
+		String output = fastaProgramOutput.getStdout();
+		List<FastaResult> parsedResults = new FastaResultParser(new StringReader(output)).parse();
+		return new FastaSearchResult(parsedResults, output);
 	}
 
-	private String execFastaProgram(File libraryFile, LibraryFileFormat format, File querySequenceFile,
+	private ProgramOutput execFastaProgram(File libraryFile, LibraryFileFormat format, File querySequenceFile,
 			SearchMode searchMode, FastaSearchQuery searchQuery) throws IOException {
 		SearchFactory factory = searchMode.getNewSearchFactory();
 
@@ -133,5 +145,13 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 		}
 
 		return factory.execSearch(querySequenceFile, libraryFile, format);
+	}
+
+	private void checkForErrors(ProgramOutput fastaProgramOutput) throws ProgramExecutionException {
+		int exitValue = fastaProgramOutput.getExitValue();
+		if (exitValue != 0) {
+			throw new ProgramExecutionException("fasta program returned with exit status " + exitValue
+					+ "\nError log:\n" + fastaProgramOutput.getStderr());
+		}
 	}
 }
