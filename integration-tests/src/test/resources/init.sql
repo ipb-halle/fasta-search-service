@@ -1,8 +1,8 @@
 CREATE TABLE sequences (
 	id INTEGER PRIMARY KEY,
-	sequencetype VARCHAR NOT NULL,
-	description VARCHAR,
-	sequence VARCHAR NOT NULL
+	sequencetype TEXT NOT NULL,
+	description TEXT,
+	sequence TEXT NOT NULL
 );
 
 -- data from fasta-search-service/service/src/test/resources/de/ipb_halle/fasta_search_service/fastaresult/data7.fasta or data9.fasta
