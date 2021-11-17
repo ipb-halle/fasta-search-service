@@ -24,7 +24,7 @@ public class FastaResultBuilderException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @param message
+	 * @param message detail message
 	 */
 	public FastaResultBuilderException(String message) {
 		super(message);

@@ -27,10 +27,10 @@ import java.util.stream.Stream;
  * program of the fasta36 suite.
  * <p>
  * What happens in the alignments in case frame is REVERSE?<p>
- * - Protein query -> Protein DB (fasta36): no reverse permitted<p>
- * - DNA query -> DNA DB (fasta36): query alignment is reverse complement, subject alignment is forward<p>
- * - DNA query -> Protein DB (fastx36/fasty36): query alignment is reverse complement, subject alignment is forward<p>
- * - Protein query -> DNA DB (tfastx36/tfasty36): query alignment is forward, subject alignment is reverse complement
+ * - Protein query in Protein DB (fasta36): no reverse permitted<p>
+ * - DNA query in DNA DB (fasta36): query alignment is reverse complement, subject alignment is forward<p>
+ * - DNA query in Protein DB (fastx36/fasty36): query alignment is reverse complement, subject alignment is forward<p>
+ * - Protein query in DNA DB (tfastx36/tfasty36): query alignment is forward, subject alignment is reverse complement
  * 
  * @author flange
  */

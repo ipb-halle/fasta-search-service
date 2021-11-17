@@ -24,8 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import de.ipb_halle.fasta_search_service.models.fastaresult.FastaResult;
 
 /**
- * POJO for search results, which the {@link FastaSearchEndpoint} endpoints
- * return.
+ * POJO for search results, which the FastaSearchEndpoint endpoints return.
  * 
  * @author flange
  */

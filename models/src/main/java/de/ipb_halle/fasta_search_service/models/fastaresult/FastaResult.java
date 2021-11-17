@@ -384,7 +384,7 @@ public class FastaResult {
 				+ "\n, similarity=" + similarity
 				+ "\n, overlap=" + overlap
 				+ "\n, querySequenceName=" + querySequenceName
-				+ "\n, querySequenceDescription="	+ querySequenceDescription
+				+ "\n, querySequenceDescription=" + querySequenceDescription
 				+ "\n, querySequenceLength=" + querySequenceLength
 				+ "\n, queryAlignmentStart=" + queryAlignmentStart
 				+ "\n, queryAlignmentStop=" + queryAlignmentStop
@@ -396,7 +396,7 @@ public class FastaResult {
 				+ "\n, subjectAlignmentStart=" + subjectAlignmentStart
 				+ "\n, subjectAlignmentStop=" + subjectAlignmentStop
 				+ "\n, subjectAlignmentDisplayStart=" + subjectAlignmentDisplayStart
-				+ "\n, subjectAlignmentLine="	+ subjectAlignmentLine
+				+ "\n, subjectAlignmentLine=" + subjectAlignmentLine
 				+ "\n, consensusLine=" + consensusLine
 				+ "\n]";
 	}

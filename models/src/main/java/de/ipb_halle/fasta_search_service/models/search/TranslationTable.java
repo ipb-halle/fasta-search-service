@@ -68,6 +68,7 @@ public enum TranslationTable {
 	}
 
 	/**
+	 * @param id id number
 	 * @return {@link TranslationTable} item from the given translation table id
 	 *         number or {@code null} if there is no item with that id
 	 */
