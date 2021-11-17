@@ -33,6 +33,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.ipb_halle.fasta_search_service.models.search.TranslationTable;
 import de.ipb_halle.fasta_search_service.search.factories.DNADNASearchFactory;
 import de.ipb_halle.fasta_search_service.search.factories.DNAProteinSearchFactory;
 import de.ipb_halle.fasta_search_service.search.factories.ProteinDNASearchFactory;

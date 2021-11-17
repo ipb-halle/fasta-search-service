@@ -26,6 +26,11 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import de.ipb_halle.fasta_search_service.models.fastaresult.FastaResult;
+import de.ipb_halle.fasta_search_service.models.fastaresult.FastaResultBuilder;
+import de.ipb_halle.fasta_search_service.models.fastaresult.FastaResultBuilderException;
+import de.ipb_halle.fasta_search_service.models.fastaresult.Frame;
+
 /**
  * Parser implementation for the output of sequence searches by the fasta36
  * suite with the parameter "-m 10".
@@ -113,10 +118,17 @@ public class FastaResultParser {
 	 * the constructor {@link #FastaResultParser(Reader)}.
 	 * 
 	 * @return list of results, not necessarily sorted by score
-	 * @throws IOException
 	 * @throws FastaResultParserException
 	 */
-	public List<FastaResult> parse() throws IOException, FastaResultParserException {
+	public List<FastaResult> parse() throws FastaResultParserException {
+		try {
+			return parseInput();
+		} catch (IOException | FastaResultBuilderException e) {
+			throw new FastaResultParserException(e);
+		}
+	}
+
+	private List<FastaResult> parseInput() throws FastaResultParserException, IOException, FastaResultBuilderException {
 		List<FastaResult> results = new ArrayList<>();
 		String line;
 		String querySequenceName = null;

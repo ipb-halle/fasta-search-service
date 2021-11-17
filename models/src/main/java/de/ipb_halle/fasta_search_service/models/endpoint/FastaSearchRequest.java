@@ -15,7 +15,7 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.endpoint.model;
+package de.ipb_halle.fasta_search_service.models.endpoint;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -47,6 +47,9 @@ public class FastaSearchRequest {
 
 	@Override
 	public String toString() {
-		return "FastaSearchRequest [libraryFile=" + libraryFile + ", searchQuery=" + searchQuery + "]";
+		return "FastaSearchRequest ["
+				+ "\n  libraryFile=" + libraryFile
+				+ "\n, searchQuery=" + searchQuery
+				+ "\n]";
 	}
 }

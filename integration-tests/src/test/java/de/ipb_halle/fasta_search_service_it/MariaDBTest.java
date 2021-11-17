@@ -44,11 +44,11 @@ import org.testcontainers.containers.MariaDBContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchQuery;
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchRequest;
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchResult;
-import de.ipb_halle.fasta_search_service.fastaresult.FastaResult;
-import de.ipb_halle.fasta_search_service.search.TranslationTable;
+import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;
+import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
+import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
+import de.ipb_halle.fasta_search_service.models.fastaresult.FastaResult;
+import de.ipb_halle.fasta_search_service.models.search.TranslationTable;
 import de.ipb_halle.fasta_search_service_it.util.TestUtils;
 
 /**

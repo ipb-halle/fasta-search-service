@@ -27,18 +27,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchQuery;
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchRequest;
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchResult;
-import de.ipb_halle.fasta_search_service.fastaresult.FastaResult;
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParser;
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
+import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;
+import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
+import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
+import de.ipb_halle.fasta_search_service.models.fastaresult.FastaResult;
+import de.ipb_halle.fasta_search_service.models.search.TranslationTable;
 import de.ipb_halle.fasta_search_service.search.LibraryFileFormat;
 import de.ipb_halle.fasta_search_service.search.ProgramOutput;
 import de.ipb_halle.fasta_search_service.search.SearchFactory;
 import de.ipb_halle.fasta_search_service.search.SearchMode;
 import de.ipb_halle.fasta_search_service.search.SequenceType;
-import de.ipb_halle.fasta_search_service.search.TranslationTable;
 import de.ipb_halle.fasta_search_service.util.FastaFileFormatUtils;
 
 /**
@@ -123,7 +123,7 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 
 	private FastaSearchResult execSearchAndParseResults(File libraryFile, LibraryFileFormat format,
 			File querySequenceFile, SearchMode searchMode, FastaSearchQuery searchQuery)
-			throws IOException, FastaResultParserException, ProgramExecutionException {
+			throws FastaResultParserException, ProgramExecutionException, IOException {
 		ProgramOutput fastaProgramOutput = execFastaProgram(libraryFile, format, querySequenceFile, searchMode,
 				searchQuery);
 

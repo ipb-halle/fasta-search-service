@@ -15,22 +15,34 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.fastaresult;
+package de.ipb_halle.fasta_search_service.models.endpoint;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
+
+import de.ipb_halle.fasta_search_service.models.fastaresult.FastaResult;
 
 /**
  * @author flange
  */
-public class FrameTest {
+public class FastaSearchResultTest {
 	@Test
-	public void testFromPattern() throws FastaResultParserException {
-		assertEquals(Frame.FORWARD, Frame.fromPattern("f"));
-		assertEquals(Frame.REVERSE, Frame.fromPattern("r"));
-		assertThrows(FastaResultParserException.class, () -> Frame.fromPattern("abc"));
-		assertThrows(FastaResultParserException.class, () -> Frame.fromPattern(null));
+	public void test_defaultsAndGettersAndSetters() {
+		FastaSearchResult result = new FastaSearchResult();
+
+		assertNull(result.getResults());
+		List<FastaResult> results = new ArrayList<>();
+		result.setResults(results);
+		assertSame(results, result.getResults());
+
+		assertNull(result.getProgramOutput());
+		result.setProgramOutput("abc");
+		assertEquals("abc", result.getProgramOutput());
 	}
 }

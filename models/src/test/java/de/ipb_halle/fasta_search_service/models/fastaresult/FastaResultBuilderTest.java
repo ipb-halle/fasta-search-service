@@ -15,7 +15,7 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.fastaresult;
+package de.ipb_halle.fasta_search_service.models.fastaresult;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -153,6 +153,6 @@ public class FastaResultBuilderTest {
 
 	@Test
 	public void testBuildFails() {
-		assertThrows(FastaResultParserException.class, () -> new FastaResultBuilder().build());
+		assertThrows(FastaResultBuilderException.class, () -> new FastaResultBuilder().build());
 	}
 }

@@ -22,9 +22,9 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchResult;
-import de.ipb_halle.fasta_search_service.fastaresult.FastaResult;
-import de.ipb_halle.fasta_search_service.fastaresult.Frame;
+import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
+import de.ipb_halle.fasta_search_service.models.fastaresult.FastaResult;
+import de.ipb_halle.fasta_search_service.models.fastaresult.Frame;
 
 /**
  * Collection of reusable assertions.

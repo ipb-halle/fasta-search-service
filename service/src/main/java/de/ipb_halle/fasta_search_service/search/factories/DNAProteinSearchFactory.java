@@ -20,8 +20,8 @@ package de.ipb_halle.fasta_search_service.search.factories;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.ipb_halle.fasta_search_service.models.search.TranslationTable;
 import de.ipb_halle.fasta_search_service.search.SearchFactory;
-import de.ipb_halle.fasta_search_service.search.TranslationTable;
 
 /**
  * {@link SearchFactory} implementation for searches with DNA query sequences in

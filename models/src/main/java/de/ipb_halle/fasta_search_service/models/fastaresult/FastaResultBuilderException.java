@@ -15,21 +15,18 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.service;
-
-import java.io.IOException;
-
-import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
-import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
-import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
-import de.ipb_halle.fasta_search_service.search.LibraryFileFormat;
+package de.ipb_halle.fasta_search_service.models.fastaresult;
 
 /**
- * 
- * 
  * @author flange
  */
-public interface FastaSearchService {
-	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
-			throws InvalidFastaSearchRequestException, IOException, FastaResultParserException, ProgramExecutionException;
+public class FastaResultBuilderException extends Exception {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @param message
+	 */
+	public FastaResultBuilderException(String message) {
+		super(message);
+	}
 }

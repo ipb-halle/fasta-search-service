@@ -18,9 +18,11 @@
 package de.ipb_halle.fasta_search_service_it;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import javax.ws.rs.client.Client;
@@ -41,11 +43,11 @@ import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchQuery;
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchRequest;
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchResult;
-import de.ipb_halle.fasta_search_service.fastaresult.FastaResult;
-import de.ipb_halle.fasta_search_service.search.TranslationTable;
+import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;
+import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
+import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
+import de.ipb_halle.fasta_search_service.models.fastaresult.FastaResult;
+import de.ipb_halle.fasta_search_service.models.search.TranslationTable;
 import de.ipb_halle.fasta_search_service_it.util.TestUtils;
 
 /**
@@ -53,14 +55,16 @@ import de.ipb_halle.fasta_search_service_it.util.TestUtils;
  */
 public class PostgresTest {
 	private static final String postgresImageName = "postgres:13";
+	private static final int dbPort = 5432;
 	private static final String dbName = "integration-tests-db";
 	private static final String user = "test";
 	private static final String password = "testpassword";
 	private static final String table = "sequences";
 	private static final String initScript = "init.sql";
+	private static final String endpointName = "searchPostgres";
 
-	private static String dnaLibraryFile = TestUtils.getLibraryFile("db", 5432, dbName, user, password, table, "DNA");
-	private static String proteinLibraryFile = TestUtils.getLibraryFile("db", 5432, dbName, user, password, table,
+	private static String dnaLibraryFile = TestUtils.getLibraryFile("db", dbPort, dbName, user, password, table, "DNA");
+	private static String proteinLibraryFile = TestUtils.getLibraryFile("db", dbPort, dbName, user, password, table,
 			"PROTEIN");
 
 	private static Logger logger = LoggerFactory.getLogger(PostgresTest.class);
@@ -107,7 +111,7 @@ public class PostgresTest {
 		request.setSearchQuery(query);
 		request.setLibraryFile(dnaLibraryFile);
 
-		Response response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_JSON)
+		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.json(request));
 
 		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
@@ -130,7 +134,7 @@ public class PostgresTest {
 		request.setSearchQuery(query);
 		request.setLibraryFile(proteinLibraryFile);
 
-		Response response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_JSON)
+		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.xml(request));
 
 		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
@@ -153,7 +157,7 @@ public class PostgresTest {
 		request.setSearchQuery(query);
 		request.setLibraryFile(proteinLibraryFile);
 
-		Response response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_XML)
+		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_XML)
 				.post(Entity.json(request));
 
 		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
@@ -176,7 +180,7 @@ public class PostgresTest {
 		request.setSearchQuery(query);
 		request.setLibraryFile(dnaLibraryFile);
 
-		Response response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_XML)
+		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_XML)
 				.post(Entity.xml(request));
 
 		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
@@ -196,7 +200,7 @@ public class PostgresTest {
 		request.setSearchQuery(query);
 		request.setLibraryFile(proteinLibraryFile);
 
-		Response response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_JSON)
+		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.json(request));
 
 		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
@@ -205,16 +209,14 @@ public class PostgresTest {
 		assertTrue(searchResult.getResults().size() > 1);
 
 		query.setMaxResults(3);
-		response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_JSON)
+		response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.json(request));
 		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
 		searchResult = response.readEntity(FastaSearchResult.class);
-		assertFalse(searchResult.getProgramOutput().isEmpty());
+		assertThat(searchResult.getProgramOutput(), not(emptyString()));
 		String firstLine = searchResult.getProgramOutput().split("\n")[0];
-		assertTrue(firstLine.contains("-b 3"));
-		assertTrue(firstLine.contains("-d 3"));
-
-		System.out.println(searchResult.getProgramOutput());
+		assertThat(firstLine, containsString("-b 3"));
+		assertThat(firstLine, containsString("-d 3"));
 		assertThat(searchResult.getResults(), hasSize(3));
 	}
 
@@ -232,13 +234,13 @@ public class PostgresTest {
 		request.setSearchQuery(query);
 		request.setLibraryFile(proteinLibraryFile);
 
-		Response response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_JSON)
+		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.json(request));
 
 		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
 		FastaSearchResult searchResult = response.readEntity(FastaSearchResult.class);
-		assertFalse(searchResult.getProgramOutput().isEmpty());
-		assertTrue(searchResult.getProgramOutput().split("\n")[0].contains("\"-t 9\""));
+		assertThat(searchResult.getProgramOutput(), not(emptyString()));
+		assertThat(searchResult.getProgramOutput().split("\n")[0], containsString("\"-t 9\""));
 
 		FastaResult firstResult = searchResult.getResults().get(0);
 		// With the default translation table we would get "SAVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA".
@@ -255,15 +257,15 @@ public class PostgresTest {
 		FastaSearchRequest request = new FastaSearchRequest();
 		request.setSearchQuery(query);
 
-		String libraryFile = TestUtils.getLibraryFile("db", 5432, "wrongdatabase", user, password, table,
+		String libraryFile = TestUtils.getLibraryFile("db", dbPort, "wrongdatabase", user, password, table,
 				"PROTEIN");
 		request.setLibraryFile(libraryFile);
-		Response response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_JSON)
+		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.xml(request));
 		assertEquals(Status.INTERNAL_SERVER_ERROR, Status.fromStatusCode(response.getStatus()));
 		String errorMessage = response.readEntity(String.class);
-		assertTrue(errorMessage.contains("Connection to database 'wrongdatabase' failed"));
-		assertTrue(errorMessage.contains("database \"wrongdatabase\" does not exist"));
+		assertThat(errorMessage, containsString("Connection to database 'wrongdatabase' failed"));
+		assertThat(errorMessage, containsString("database \"wrongdatabase\" does not exist"));
 	}
 
 	@Test
@@ -276,14 +278,14 @@ public class PostgresTest {
 		FastaSearchRequest request = new FastaSearchRequest();
 		request.setSearchQuery(query);
 
-		String libraryFile = TestUtils.getLibraryFile("db", 5432, dbName, user, password, "wrongtable",
+		String libraryFile = TestUtils.getLibraryFile("db", dbPort, dbName, user, password, "wrongtable",
 				"PROTEIN");
 		request.setLibraryFile(libraryFile);
-		Response response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_JSON)
+		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.xml(request));
 		assertEquals(Status.INTERNAL_SERVER_ERROR, Status.fromStatusCode(response.getStatus()));
 		String errorMessage = response.readEntity(String.class);
-		assertTrue(errorMessage.contains("relation \"wrongtable\" does not exist"));
+		assertThat(errorMessage, containsString("relation \"wrongtable\" does not exist"));
 	}
 
 	@Test
@@ -296,24 +298,24 @@ public class PostgresTest {
 		FastaSearchRequest request = new FastaSearchRequest();
 		request.setSearchQuery(query);
 
-		String libraryFile = TestUtils.getLibraryFile("db", 5432, dbName, "wrongUser", password, table,
+		String libraryFile = TestUtils.getLibraryFile("db", dbPort, dbName, "wrongUser", password, table,
 				"PROTEIN");
 		request.setLibraryFile(libraryFile);
-		Response response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_JSON)
+		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.xml(request));
 		assertEquals(Status.INTERNAL_SERVER_ERROR, Status.fromStatusCode(response.getStatus()));
 		String errorMessage = response.readEntity(String.class);
-		assertTrue(errorMessage.contains("Connection to database 'integration-tests-db' failed"));
-		assertTrue(errorMessage.contains("password authentication failed for user \"wrongUser\""));
+		assertThat(errorMessage, containsString("Connection to database 'integration-tests-db' failed"));
+		assertThat(errorMessage, containsString("password authentication failed for user \"wrongUser\""));
 
-		libraryFile = TestUtils.getLibraryFile("db", 5432, dbName, user, "wrongPassword", table,
+		libraryFile = TestUtils.getLibraryFile("db", dbPort, dbName, user, "wrongPassword", table,
 				"PROTEIN");
 		request.setLibraryFile(libraryFile);
-		response = client.target(uri).path("searchPostgres").request().accept(MediaType.APPLICATION_JSON)
+		response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.xml(request));
 		assertEquals(Status.INTERNAL_SERVER_ERROR, Status.fromStatusCode(response.getStatus()));
 		errorMessage = response.readEntity(String.class);
-		assertTrue(errorMessage.contains("Connection to database 'integration-tests-db' failed"));
-		assertTrue(errorMessage.contains("password authentication failed for user \"test\""));
+		assertThat(errorMessage, containsString("Connection to database 'integration-tests-db' failed"));
+		assertThat(errorMessage, containsString("password authentication failed for user \"test\""));
 	}
 }

@@ -53,10 +53,8 @@
 		</dependency>
 		<dependency>
 			<groupId>de.ipb-halle</groupId>
-			<artifactId>fasta-search-service</artifactId>
+			<artifactId>fasta-search-service-models</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			<scope>test</scope>
-			<classifier>classes</classifier>
 		</dependency>
 
 		<!-- REST client -->

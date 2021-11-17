@@ -7,9 +7,9 @@ LABEL stage=fasta-search-service-builder
 
 WORKDIR /usr/src/app
 
-COPY ./service/ .
+COPY ./ .
 
-RUN mvn -B -e -C package
+RUN mvn -B -e -C -pl '!integration-tests' clean package
 
 #
 # Build fasta36
@@ -57,7 +57,7 @@ RUN set -ex \
 	&& useradd -g tomee tomee \
 	&& chown -R tomee:tomee /usr/local/tomee
 
-COPY --from=mavenBuild /usr/src/app/target/Fasta-Search-Service.war /usr/local/tomee/webapps/
+COPY --from=mavenBuild /usr/src/app/service/target/Fasta-Search-Service.war /usr/local/tomee/webapps/
 COPY --from=fasta36Build /build /usr/local/
 
 USER tomee

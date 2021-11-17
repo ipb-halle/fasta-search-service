@@ -29,4 +29,11 @@ public class FastaResultParserException extends Exception {
 	public FastaResultParserException(String message) {
 		super(message);
 	}
+
+	/**
+	 * @param cause
+	 */
+	public FastaResultParserException(Throwable cause) {
+		super(cause);
+	}
 }

@@ -33,10 +33,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchQuery;
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchRequest;
-import de.ipb_halle.fasta_search_service.endpoint.model.FastaSearchResult;
 import de.ipb_halle.fasta_search_service.logger.LoggerProducer;
+import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;
+import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
+import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
 
 /**
  * @author flange

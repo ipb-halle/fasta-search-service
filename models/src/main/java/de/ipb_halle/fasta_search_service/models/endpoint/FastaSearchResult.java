@@ -15,13 +15,13 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.endpoint.model;
+package de.ipb_halle.fasta_search_service.models.endpoint;
 
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.ipb_halle.fasta_search_service.fastaresult.FastaResult;
+import de.ipb_halle.fasta_search_service.models.fastaresult.FastaResult;
 
 /**
  * POJO for search results, which the {@link FastaSearchEndpoint} endpoints

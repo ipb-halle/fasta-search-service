@@ -4,21 +4,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>de.ipb-halle</groupId>
-		<artifactId>fasta-search-service-parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
+	<groupId>de.ipb-halle</groupId>
+	<artifactId>fasta-search-service-models</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 
-	<artifactId>fasta-search-service</artifactId>
+	<packaging>jar</packaging>
 
-	<packaging>war</packaging>
-
-	<name>Fasta-Search-Service</name>
+	<name>Fasta-Search-Service-Models</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<tomee.version>8.0.8</tomee.version>
 	</properties>
 
 	<build>
@@ -34,33 +29,15 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>3.3.2</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 
 	<dependencies>
 		<dependency>
-			<groupId>de.ipb-halle</groupId>
-			<artifactId>fasta-search-service-models</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>jakarta.platform</groupId>
-			<artifactId>jakarta.jakartaee-web-api</artifactId>
-			<version>8.0.0</version>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>2.0.2</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.12.0</version>
 		</dependency>
 
 		<!-- dependencies for testing -->
@@ -76,10 +53,20 @@
 			<version>2.2</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- The bean validation API is provided by the JavaEE container only
+			 during runtime, but not during tests. Thus, we need to include an
+			 implementation. -->
 		<dependency>
-			<groupId>org.apache.tomee</groupId>
-			<artifactId>openejb-cxf-rs</artifactId>
-			<version>${tomee.version}</version>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.2.0.Final</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Required by org.hibernate.validator.hibernate-validator -->
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>jakarta.el</artifactId>
+			<version>3.0.4</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

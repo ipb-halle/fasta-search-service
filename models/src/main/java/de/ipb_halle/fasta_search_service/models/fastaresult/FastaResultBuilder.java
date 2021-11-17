@@ -15,7 +15,7 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.fastaresult;
+package de.ipb_halle.fasta_search_service.models.fastaresult;
 
 import java.util.Set;
 
@@ -58,11 +58,11 @@ public class FastaResultBuilder {
 	 * Build a {@link FastaResult} object from the current state of this builder and
 	 * check its validity.
 	 * 
-	 * @return
-	 * @throws FastaResultParserException when validation of the constructed
+	 * @return valid {@link FastaResult} object
+	 * @throws FastaResultBuilderException when validation of the constructed
 	 *                                    {@link FastaResult} object fails
 	 */
-	public FastaResult build() throws FastaResultParserException {
+	public FastaResult build() throws FastaResultBuilderException {
 		FastaResult result = new FastaResult(this);
 
 		// Validate using bean validation (JSR 349).
@@ -73,7 +73,7 @@ public class FastaResultBuilder {
 			messages.append("Unable to build a valid FASTA result:");
 			constraintViolations.forEach(violation -> messages.append("\n")
 					.append(violation.getPropertyPath() + ": " + violation.getMessage()));
-			throw new FastaResultParserException(messages.toString());
+			throw new FastaResultBuilderException(messages.toString());
 		}
 
 		return result;

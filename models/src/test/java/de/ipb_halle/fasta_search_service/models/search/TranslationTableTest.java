@@ -15,7 +15,7 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.search;
+package de.ipb_halle.fasta_search_service.models.search;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

@@ -15,7 +15,7 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.fastaresult;
+package de.ipb_halle.fasta_search_service.models.fastaresult;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;

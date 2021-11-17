@@ -20,6 +20,8 @@ package de.ipb_halle.fasta_search_service.search;
 import java.io.File;
 import java.io.IOException;
 
+import de.ipb_halle.fasta_search_service.models.search.TranslationTable;
+
 /**
  * Prototype class responsible for a building parameter list for the fasta36
  * programs and executing sequence searches.

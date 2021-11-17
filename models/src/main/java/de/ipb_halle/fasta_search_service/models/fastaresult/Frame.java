@@ -15,7 +15,7 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.fastaresult;
+package de.ipb_halle.fasta_search_service.models.fastaresult;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -48,12 +48,12 @@ public enum Frame {
 	/**
 	 * @param pattern value of the frame direction from a fasta36 result output
 	 * @return enumeration item matching the given pattern
-	 * @throws FastaResultParserException if the pattern matches no item
+	 * @throws FastaResultBuilderException if the pattern matches no item
 	 */
-	public static Frame fromPattern(String pattern) throws FastaResultParserException {
+	public static Frame fromPattern(String pattern) throws FastaResultBuilderException {
 		Frame result = lookupMap.get(pattern);
 		if (result == null) {
-			throw new FastaResultParserException("Unknown pattern '" + pattern + "'.");
+			throw new FastaResultBuilderException("Unknown pattern '" + pattern + "'.");
 		}
 		return result;
 	}

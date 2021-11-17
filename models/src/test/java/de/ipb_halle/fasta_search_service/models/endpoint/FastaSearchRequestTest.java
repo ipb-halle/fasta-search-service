@@ -15,21 +15,29 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.service;
+package de.ipb_halle.fasta_search_service.models.endpoint;
 
-import java.io.IOException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
-import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
-import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
-import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
-import de.ipb_halle.fasta_search_service.search.LibraryFileFormat;
+import org.junit.Test;
 
 /**
- * 
- * 
  * @author flange
  */
-public interface FastaSearchService {
-	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
-			throws InvalidFastaSearchRequestException, IOException, FastaResultParserException, ProgramExecutionException;
+public class FastaSearchRequestTest {
+	@Test
+	public void test_defaultsAndGettersAndSetters() {
+		FastaSearchRequest request = new FastaSearchRequest();
+
+		assertNull(request.getLibraryFile());
+		request.setLibraryFile("abc");
+		assertEquals("abc", request.getLibraryFile());
+
+		assertNull(request.getSearchQuery());
+		FastaSearchQuery query = new FastaSearchQuery();
+		request.setSearchQuery(query);
+		assertSame(query, request.getSearchQuery());
+	}
 }
