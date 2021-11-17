@@ -43,7 +43,7 @@ public class DNAProteinSearchFactory extends SearchFactory {
 		List<String> params = new ArrayList<>();
 		params.add(PARAM_NUCLEOTIDE_QUERY);
 		params.add(String.format(PARAM_TRANSLATION_TABLE_FORMAT, translationTable.getId()));
-		return (String[]) params.toArray(new String[0]);
+		return params.toArray(new String[0]);
 	}
 
 	@Override

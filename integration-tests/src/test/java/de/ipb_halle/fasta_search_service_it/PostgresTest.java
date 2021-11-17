@@ -87,7 +87,7 @@ public class PostgresTest {
 	@Before
 	public void init() {
 		uri = "http://" + fastaSearchContainer.getHost() + ":" + fastaSearchContainer.getMappedPort(8080)
-				+ "/Fasta-Search-Service";
+				+ "/fasta-search-service";
 		client = ClientBuilder.newClient();
 	}
 

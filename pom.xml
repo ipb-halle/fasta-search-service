@@ -10,7 +10,7 @@
 
 	<packaging>pom</packaging>
 
-	<name>Fasta-Search-Service-Parent</name>
+	<name>fasta-search-service parent</name>
 
 	<modules>
 		<module>models</module>

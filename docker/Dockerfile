@@ -57,7 +57,7 @@ RUN set -ex \
 	&& useradd -g tomee tomee \
 	&& chown -R tomee:tomee /usr/local/tomee
 
-COPY --from=mavenBuild /usr/src/app/service/target/Fasta-Search-Service.war /usr/local/tomee/webapps/
+COPY --from=mavenBuild /usr/src/app/service/target/fasta-search-service.war /usr/local/tomee/webapps/
 COPY --from=fasta36Build /build /usr/local/
 
 USER tomee
