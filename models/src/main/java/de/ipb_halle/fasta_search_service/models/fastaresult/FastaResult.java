@@ -17,6 +17,8 @@
  */
 package de.ipb_halle.fasta_search_service.models.fastaresult;
 
+import java.util.Objects;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -371,6 +373,64 @@ public class FastaResult {
 	}
 
 	public FastaResult() {
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(
+				bitScore,
+				consensusLine,
+				expectationValue,
+				frame,
+				identity,
+				overlap,
+				queryAlignmentDisplayStart,
+				queryAlignmentLine,
+				queryAlignmentStart,
+				queryAlignmentStop,
+				querySequenceDescription,
+				querySequenceLength,
+				querySequenceName,
+				similarity,
+				smithWatermanScore,
+				subjectAlignmentDisplayStart,
+				subjectAlignmentLine,
+				subjectAlignmentStart,
+				subjectAlignmentStop,
+				subjectSequenceDescription,
+				subjectSequenceLength,
+				subjectSequenceName);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof FastaResult))
+			return false;
+		FastaResult other = (FastaResult) obj;
+		return Objects.equals(bitScore, other.bitScore)
+				&& Objects.equals(consensusLine, other.consensusLine)
+				&& Objects.equals(expectationValue, other.expectationValue)
+				&& Objects.equals(frame, other.frame)
+				&& Objects.equals(identity, other.identity)
+				&& overlap == other.overlap
+				&& queryAlignmentDisplayStart == other.queryAlignmentDisplayStart
+				&& Objects.equals(queryAlignmentLine, other.queryAlignmentLine)
+				&& queryAlignmentStart == other.queryAlignmentStart
+				&& queryAlignmentStop == other.queryAlignmentStop
+				&& Objects.equals(querySequenceDescription, other.querySequenceDescription)
+				&& querySequenceLength == other.querySequenceLength
+				&& Objects.equals(querySequenceName, other.querySequenceName)
+				&& Objects.equals(similarity, other.similarity)
+				&& smithWatermanScore == other.smithWatermanScore
+				&& subjectAlignmentDisplayStart == other.subjectAlignmentDisplayStart
+				&& Objects.equals(subjectAlignmentLine, other.subjectAlignmentLine)
+				&& subjectAlignmentStart == other.subjectAlignmentStart
+				&& subjectAlignmentStop == other.subjectAlignmentStop
+				&& Objects.equals(subjectSequenceDescription, other.subjectSequenceDescription)
+				&& subjectSequenceLength == other.subjectSequenceLength
+				&& Objects.equals(subjectSequenceName, other.subjectSequenceName);
 	}
 
 	@Override

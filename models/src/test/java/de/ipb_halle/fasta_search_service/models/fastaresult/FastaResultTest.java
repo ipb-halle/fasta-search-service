@@ -18,6 +18,7 @@
 package de.ipb_halle.fasta_search_service.models.fastaresult;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
@@ -122,31 +123,8 @@ public class FastaResultTest {
 
 	@Test
 	public void test_build() throws FastaResultBuilderException {
-		FastaResultBuilder builder = FastaResult.builder();
+		FastaResultBuilder builder = newBuilder();
 		double delta = 0.001;
-
-		builder.frame(Frame.REVERSE);
-		builder.bitScore(123.456);
-		builder.expectationValue(2123.456);
-		builder.smithWatermanScore(42);
-		builder.identity(1323.456);
-		builder.similarity(1253.456);
-		builder.overlap(43);
-		builder.querySequenceName("a");
-		builder.querySequenceDescription("ab");
-		builder.querySequenceLength(125);
-		builder.queryAlignmentStart(123455);
-		builder.queryAlignmentStop(1255);
-		builder.queryAlignmentDisplayStart(1575);
-		builder.queryAlignmentLine("abcd");
-		builder.subjectSequenceName("abcde");
-		builder.subjectSequenceDescription("abcdef");
-		builder.subjectSequenceLength(987);
-		builder.subjectAlignmentStart(9876);
-		builder.subjectAlignmentStop(98760);
-		builder.subjectAlignmentDisplayStart(7601);
-		builder.subjectAlignmentLine("g");
-		builder.consensusLine("gh");
 
 		FastaResult result = builder.build();
 
@@ -172,5 +150,130 @@ public class FastaResultTest {
 		assertEquals(7601, result.getSubjectAlignmentDisplayStart());
 		assertEquals("g", result.getSubjectAlignmentLine());
 		assertEquals("gh", result.getConsensusLine());
+	}
+
+	@Test
+	public void test_equalsAndHashCode() throws FastaResultBuilderException {
+		FastaResultBuilder builder = newBuilder();
+		FastaResult result1 = builder.build();
+		FastaResult result2;
+
+		result2 = newBuilder().build();
+		assertEquals(result1, result2);
+		assertEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().frame(Frame.FORWARD).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().bitScore(13.2).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().expectationValue(0.2).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().smithWatermanScore(1).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().identity(9.1).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().similarity(73.8).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().overlap(42).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().querySequenceName("b").build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().querySequenceDescription("ba").build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().querySequenceLength(2).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().queryAlignmentStart(57).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().queryAlignmentStop(84).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().queryAlignmentDisplayStart(35).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().queryAlignmentLine("xyz").build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().subjectSequenceName("qrs").build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().subjectSequenceDescription("abc").build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().subjectSequenceLength(23685).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().subjectAlignmentStart(478).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().subjectAlignmentStop(1237).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().subjectAlignmentDisplayStart(234).build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().subjectAlignmentLine("h").build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+
+		result2 = newBuilder().consensusLine(":").build();
+		assertNotEquals(result1, result2);
+		assertNotEquals(result1.hashCode(), result2.hashCode());
+	}
+
+	private FastaResultBuilder newBuilder() {
+		return FastaResult.builder()
+				.frame(Frame.REVERSE)
+				.bitScore(123.456)
+				.expectationValue(2123.456)
+				.smithWatermanScore(42)
+				.identity(1323.456)
+				.similarity(1253.456)
+				.overlap(43)
+				.querySequenceName("a")
+				.querySequenceDescription("ab")
+				.querySequenceLength(125)
+				.queryAlignmentStart(123455)
+				.queryAlignmentStop(1255)
+				.queryAlignmentDisplayStart(1575)
+				.queryAlignmentLine("abcd")
+				.subjectSequenceName("abcde")
+				.subjectSequenceDescription("abcdef")
+				.subjectSequenceLength(987)
+				.subjectAlignmentStart(9876)
+				.subjectAlignmentStop(98760)
+				.subjectAlignmentDisplayStart(7601)
+				.subjectAlignmentLine("g")
+				.consensusLine("gh");
 	}
 }
