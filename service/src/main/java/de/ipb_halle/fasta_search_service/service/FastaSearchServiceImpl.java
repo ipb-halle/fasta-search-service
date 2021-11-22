@@ -21,12 +21,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
+
+import org.apache.commons.lang3.EnumUtils;
+
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParser;
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;
@@ -51,12 +53,10 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
 			throws InvalidFastaSearchRequestException, IOException, FastaResultParserException,
 			ProgramExecutionException {
+		checkFastaSearchRequest(request);
+
 		FastaSearchQuery searchQuery = request.getSearchQuery();
 		String querySequence = FastaFileFormatUtils.toFastaFileFormat(searchQuery.getQuerySequence());
-
-		if (querySequence == null) {
-			return emptyResult();
-		}
 
 		FastaSearchResult result = null;
 		File querySequenceFile = null;
@@ -82,8 +82,25 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 		return result;
 	}
 
-	private FastaSearchResult emptyResult() {
-		return new FastaSearchResult(new ArrayList<>(), "");
+	private void checkFastaSearchRequest(FastaSearchRequest request) throws InvalidFastaSearchRequestException {
+		FastaSearchQuery searchQuery = request.getSearchQuery();
+		if (searchQuery == null) {
+			throw new InvalidFastaSearchRequestException("Missing searchQuery.");
+		}
+		checkQuerySequence(searchQuery.getQuerySequence());
+		checkLibraryFile(request.getLibraryFile());
+	}
+
+	private void checkQuerySequence(String querySequence) throws InvalidFastaSearchRequestException {
+		if ((querySequence == null) || (querySequence.isEmpty())) {
+			throw new InvalidFastaSearchRequestException("Invalid query sequence.");
+		}
+	}
+
+	private void checkLibraryFile(String libraryFile) throws InvalidFastaSearchRequestException {
+		if ((libraryFile == null) || (libraryFile.isEmpty())) {
+			throw new InvalidFastaSearchRequestException("Invalid library file.");
+		}
 	}
 
 	private File createQuerySequenceFile(String querySequence) throws IOException {
@@ -114,9 +131,9 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 		}
 	}
 
-	private SearchMode determineSearchMode(String querySequenceTypeAsString, String librarySequenceTypeAsString) {
-		SequenceType querySequenceType = SequenceType.valueOf(querySequenceTypeAsString.toUpperCase());
-		SequenceType librarySequenceType = SequenceType.valueOf(librarySequenceTypeAsString.toUpperCase());
+	private SearchMode determineSearchMode(String query, String library) {
+		SequenceType querySequenceType = EnumUtils.getEnumIgnoreCase(SequenceType.class, query, null);
+		SequenceType librarySequenceType = EnumUtils.getEnumIgnoreCase(SequenceType.class, library, null);
 
 		return SearchMode.getSearchModeForSequenceTypes(querySequenceType, librarySequenceType);
 	}

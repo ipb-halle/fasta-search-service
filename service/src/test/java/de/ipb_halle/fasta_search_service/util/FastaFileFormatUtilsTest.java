@@ -32,6 +32,10 @@ public class FastaFileFormatUtilsTest {
 
 		assertEquals(null, toFastaFileFormat(null));
 
+		input = "";
+		expected = ">query\n";
+		assertEquals(expected, toFastaFileFormat(input));
+
 		input = "ABCDEF";
 		expected = ">query\nABCDEF";
 		assertEquals(expected, toFastaFileFormat(input));

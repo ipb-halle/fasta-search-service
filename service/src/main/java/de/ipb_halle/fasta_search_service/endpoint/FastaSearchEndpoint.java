@@ -84,7 +84,7 @@ public class FastaSearchEndpoint {
 			FastaSearchResult result = service.search(request, format);
 			return Response.ok(result).build();
 		} catch (InvalidFastaSearchRequestException e) {
-			throw new BadRequestException(e);
+			return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
 		} catch (IOException | FastaResultParserException | ProgramExecutionException e) {
 			//logger.severe(ExceptionUtils.getStackTrace(e));
 			return Response.serverError().entity(e.getMessage()).build();

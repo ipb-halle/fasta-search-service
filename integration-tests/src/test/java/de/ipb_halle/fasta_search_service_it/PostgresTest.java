@@ -19,12 +19,7 @@ package de.ipb_halle.fasta_search_service_it;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.emptyString;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -46,8 +41,6 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
-import de.ipb_halle.fasta_search_service.models.fastaresult.FastaResult;
-import de.ipb_halle.fasta_search_service.models.search.TranslationTable;
 import de.ipb_halle.fasta_search_service_it.util.TestUtils;
 
 /**
@@ -186,65 +179,6 @@ public class PostgresTest {
 		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
 		FastaSearchResult searchResult = response.readEntity(FastaSearchResult.class);
 		FastaSearchResultAssertions.assertProteinSearchInDNALibraryResult(searchResult);
-	}
-
-	@Test
-	public void test_maxResults() {
-		FastaSearchQuery query = new FastaSearchQuery();
-		query.setQuerySequence(
-				"SAVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA");
-		query.setQuerySequenceType("PROTEIN");
-		query.setLibrarySequenceType("PROTEIN");
-		query.setMaxResults(0);
-		FastaSearchRequest request = new FastaSearchRequest();
-		request.setSearchQuery(query);
-		request.setLibraryFile(proteinLibraryFile);
-
-		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
-				.post(Entity.json(request));
-
-		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
-		FastaSearchResult searchResult = response.readEntity(FastaSearchResult.class);
-		// maxResults = 0 does not override the default
-		assertTrue(searchResult.getResults().size() > 1);
-
-		query.setMaxResults(3);
-		response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
-				.post(Entity.json(request));
-		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
-		searchResult = response.readEntity(FastaSearchResult.class);
-		assertThat(searchResult.getProgramOutput(), not(emptyString()));
-		String firstLine = searchResult.getProgramOutput().split("\n")[0];
-		assertThat(firstLine, containsString("-b 3"));
-		assertThat(firstLine, containsString("-d 3"));
-		assertThat(searchResult.getResults(), hasSize(3));
-	}
-
-	@Test
-	public void test_translationTable() {
-		FastaSearchQuery query = new FastaSearchQuery();
-		query.setQuerySequence(
-				"agcgcggtgcagcagaaactggcggcgctggaaaaaagcagcggcggccgcctgggcgtg"
-				+ "gcgctgattgataccgcggataacacccaggtgctgtatcgcggcgatgaacgctttccg"
-				+ "atgtgcagcaccagcaaagtgatggcggcg");
-		query.setQuerySequenceType("DNA");
-		query.setLibrarySequenceType("PROTEIN");
-		query.setTranslationTable(TranslationTable.ECHINODERM_MITOCHONDRIAL_FLATWORM_MITOCHONDRIAL.getId());
-		FastaSearchRequest request = new FastaSearchRequest();
-		request.setSearchQuery(query);
-		request.setLibraryFile(proteinLibraryFile);
-
-		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
-				.post(Entity.json(request));
-
-		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
-		FastaSearchResult searchResult = response.readEntity(FastaSearchResult.class);
-		assertThat(searchResult.getProgramOutput(), not(emptyString()));
-		assertThat(searchResult.getProgramOutput().split("\n")[0], containsString("\"-t 9\""));
-
-		FastaResult firstResult = searchResult.getResults().get(0);
-		// With the default translation table we would get "SAVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA".
-		assertEquals("SAVQQNLAALENSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSNVMAA", firstResult.getQueryAlignmentLine());
 	}
 
 	@Test
