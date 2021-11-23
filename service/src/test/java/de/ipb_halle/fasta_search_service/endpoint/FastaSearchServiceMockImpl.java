@@ -18,31 +18,38 @@
 package de.ipb_halle.fasta_search_service.endpoint;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
 import de.ipb_halle.fasta_search_service.search.LibraryFileFormat;
 import de.ipb_halle.fasta_search_service.service.FastaSearchService;
 import de.ipb_halle.fasta_search_service.service.InvalidFastaSearchRequestException;
+import de.ipb_halle.fasta_search_service.service.ProgramExecutionException;
 
 /**
  * @author flange
  */
 @Stateless
+@LocalBean
 public class FastaSearchServiceMockImpl implements FastaSearchService {
-	private FastaSearchResult response = new FastaSearchResult(new ArrayList<>(), "");
+	private FunctionWithExceptions<FastaSearchRequest, FastaSearchResult> behaviour;
 
 	@Override
 	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
-			throws InvalidFastaSearchRequestException, IOException, FastaResultParserException {
-		return response;
+			throws FastaResultParserException, InvalidFastaSearchRequestException, IOException,
+			ProgramExecutionException {
+		return behaviour.apply(request);
 	}
 
-	public void setResponse(FastaSearchResult response) {
-		this.response = response;
+	public void setBehaviour(FunctionWithExceptions<FastaSearchRequest, FastaSearchResult> behaviour) {
+		this.behaviour = behaviour;
+	}
+
+	@FunctionalInterface
+	public interface FunctionWithExceptions<T, R> {
+		public R apply(T t) throws FastaResultParserException, InvalidFastaSearchRequestException, IOException,
+				ProgramExecutionException;
 	}
 }

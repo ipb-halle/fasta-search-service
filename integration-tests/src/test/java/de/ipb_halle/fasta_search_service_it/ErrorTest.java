@@ -66,11 +66,6 @@ public class ErrorTest {
 	private static Network network = Network.newNetwork();
 
 	@ClassRule
-	public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(postgresImageName)
-			.withDatabaseName(dbName).withUsername(user).withPassword(password).withInitScript(initScript)
-			.withNetwork(network).withNetworkAliases("db").withLogConsumer(logConsumer);
-
-	@ClassRule
 	public static GenericContainer<?> fastaSearchContainer = new GenericContainer<>(TestUtils.getTestbuildImage())
 			.withExposedPorts(8080).withNetwork(network).withLogConsumer(logConsumer);
 

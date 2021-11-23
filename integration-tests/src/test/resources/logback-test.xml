@@ -11,7 +11,4 @@
 
     <logger name="org.testcontainers" level="DEBUG"/>
     <logger name="com.github.dockerjava" level="WARN"/>
-
-    <!-- see https://github.com/testcontainers/testcontainers-java/issues/3093#issuecomment-927086344 -->
-    <logger name="com.github.dockerjava.api.command.BuildImageResultCallback" level="DEBUG"/>
 </configuration>

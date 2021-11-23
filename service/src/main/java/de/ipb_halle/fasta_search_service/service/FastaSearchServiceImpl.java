@@ -51,7 +51,7 @@ import de.ipb_halle.fasta_search_service.util.FastaFileFormatUtils;
 public class FastaSearchServiceImpl implements FastaSearchService {
 	@Override
 	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
-			throws InvalidFastaSearchRequestException, IOException, FastaResultParserException,
+			throws FastaResultParserException, InvalidFastaSearchRequestException, IOException,
 			ProgramExecutionException {
 		checkFastaSearchRequest(request);
 

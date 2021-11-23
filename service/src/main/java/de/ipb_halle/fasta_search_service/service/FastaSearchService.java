@@ -19,6 +19,8 @@ package de.ipb_halle.fasta_search_service.service;
 
 import java.io.IOException;
 
+import javax.ejb.Local;
+
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
@@ -29,7 +31,9 @@ import de.ipb_halle.fasta_search_service.search.LibraryFileFormat;
  * 
  * @author flange
  */
+@Local
 public interface FastaSearchService {
 	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
-			throws InvalidFastaSearchRequestException, IOException, FastaResultParserException, ProgramExecutionException;
+			throws FastaResultParserException, InvalidFastaSearchRequestException, IOException,
+			ProgramExecutionException;
 }
