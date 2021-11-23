@@ -9,7 +9,7 @@ on:
       - 'master'
 
   schedule:
-    cron: '32 8 * * 4'
+    - cron: '32 8 * * 4'
 
 jobs:
   docker:
