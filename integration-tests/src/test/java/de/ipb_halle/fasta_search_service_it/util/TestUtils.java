@@ -58,7 +58,7 @@ public class TestUtils {
 		 * withDockerfile() is broken, see
 		 * https://github.com/testcontainers/testcontainers-java/issues/3218
 		 */
-		return new ImageFromDockerfile().withDockerfilePath("docker/Dockerfile").withFileFromPath(".",
+		return new ImageFromDockerfile().withDockerfilePath("Dockerfile").withFileFromPath(".",
 				Paths.get("").toAbsolutePath().getParent());
 	}
 }
