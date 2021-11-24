@@ -27,12 +27,26 @@ import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
 import de.ipb_halle.fasta_search_service.search.LibraryFileFormat;
 
 /**
- * 
+ * Perform sequence similarity searches using the fasta program suite.
  * 
  * @author flange
  */
 @Local
 public interface FastaSearchService {
+	/**
+	 * Execute a search.
+	 * 
+	 * @param request search request
+	 * @param format  format of the library file, may not be {@code null}
+	 * @return search result
+	 * @throws FastaResultParserException         in case the result file from the
+	 *                                            fasta program cannot be parsed
+	 * @throws InvalidFastaSearchRequestException in case the {@code request} object
+	 *                                            is invalid
+	 * @throws IOException                        in case an I/O error occurred
+	 * @throws ProgramExecutionException          in case the fasta program returns
+	 *                                            a failure
+	 */
 	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
 			throws FastaResultParserException, InvalidFastaSearchRequestException, IOException,
 			ProgramExecutionException;

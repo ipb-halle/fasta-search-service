@@ -19,9 +19,10 @@ package de.ipb_halle.fasta_search_service.fastaresult;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -37,8 +38,8 @@ public class FastaResultParserTest {
 
 	@Test
 	public void testParseResults1() throws FastaResultParserException {
-		Reader reader = readResourceFile("results1.txt");
-		List<FastaResult> results = new FastaResultParser(reader).parse();
+		String input = readResourceFile("results1.txt");
+		List<FastaResult> results = new FastaResultParser().parse(input);
 		FastaResult result;
 		double r;
 
@@ -170,8 +171,8 @@ public class FastaResultParserTest {
 
 	@Test
 	public void testParseResults2() throws FastaResultParserException {
-		Reader reader = readResourceFile("results2.txt");
-		List<FastaResult> results = new FastaResultParser(reader).parse();
+		String input = readResourceFile("results2.txt");
+		List<FastaResult> results = new FastaResultParser().parse(input);
 		FastaResult result;
 		double r;
 
@@ -204,8 +205,8 @@ public class FastaResultParserTest {
 
 	@Test
 	public void testParseResults3() throws FastaResultParserException {
-		Reader reader = readResourceFile("results3.txt");
-		List<FastaResult> results = new FastaResultParser(reader).parse();
+		String input = readResourceFile("results3.txt");
+		List<FastaResult> results = new FastaResultParser().parse(input);
 		FastaResult result;
 		double r;
 
@@ -238,8 +239,8 @@ public class FastaResultParserTest {
 
 	@Test
 	public void testParseResults4() throws FastaResultParserException {
-		Reader reader = readResourceFile("results4.txt");
-		List<FastaResult> results = new FastaResultParser(reader).parse();
+		String input = readResourceFile("results4.txt");
+		List<FastaResult> results = new FastaResultParser().parse(input);
 		FastaResult result;
 		double r;
 
@@ -272,24 +273,24 @@ public class FastaResultParserTest {
 
 	@Test
 	public void testParseResults5() throws FastaResultParserException {
-		Reader reader = readResourceFile("results5.txt");
-		List<FastaResult> results = new FastaResultParser(reader).parse();
+		String input = readResourceFile("results5.txt");
+		List<FastaResult> results = new FastaResultParser().parse(input);
 
 		assertEquals(0, results.size());
 	}
 
 	@Test
 	public void testParseResults6() throws FastaResultParserException {
-		Reader reader = readResourceFile("results6.txt");
-		List<FastaResult> results = new FastaResultParser(reader).parse();
+		String input = readResourceFile("results6.txt");
+		List<FastaResult> results = new FastaResultParser().parse(input);
 
 		assertEquals(0, results.size());
 	}
 
 	@Test
 	public void testParseResults7() throws FastaResultParserException {
-		Reader reader = readResourceFile("results7.txt");
-		List<FastaResult> results = new FastaResultParser(reader).parse();
+		String input = readResourceFile("results7.txt");
+		List<FastaResult> results = new FastaResultParser().parse(input);
 		FastaResult result;
 		double r;
 
@@ -547,8 +548,8 @@ public class FastaResultParserTest {
 
 	@Test
 	public void testParseResults8() throws FastaResultParserException {
-		Reader reader = readResourceFile("results8.txt");
-		List<FastaResult> results = new FastaResultParser(reader).parse();
+		String input = readResourceFile("results8.txt");
+		List<FastaResult> results = new FastaResultParser().parse(input);
 		FastaResult result;
 		double r;
 
@@ -593,8 +594,8 @@ public class FastaResultParserTest {
 
 	@Test
 	public void testParseResults9() throws FastaResultParserException {
-		Reader reader = readResourceFile("results9.txt");
-		List<FastaResult> results = new FastaResultParser(reader).parse();
+		String input = readResourceFile("results9.txt");
+		List<FastaResult> results = new FastaResultParser().parse(input);
 		FastaResult result;
 		double r;
 
@@ -630,8 +631,8 @@ public class FastaResultParserTest {
 
 	@Test
 	public void testParseResults10() throws FastaResultParserException {
-		Reader reader = readResourceFile("results10.txt");
-		List<FastaResult> results = new FastaResultParser(reader).parse();
+		String input = readResourceFile("results10.txt");
+		List<FastaResult> results = new FastaResultParser().parse(input);
 		FastaResult result;
 		double r;
 
@@ -667,8 +668,8 @@ public class FastaResultParserTest {
 
 	@Test
 	public void testParseResults11() throws FastaResultParserException {
-		Reader reader = readResourceFile("results11.txt");
-		List<FastaResult> results = new FastaResultParser(reader).parse();
+		String input = readResourceFile("results11.txt");
+		List<FastaResult> results = new FastaResultParser().parse(input);
 		FastaResult result;
 		double r;
 
@@ -704,8 +705,8 @@ public class FastaResultParserTest {
 
 	@Test
 	public void testParseResults12() throws FastaResultParserException {
-		Reader reader = readResourceFile("results12.txt");
-		List<FastaResult> results = new FastaResultParser(reader).parse();
+		String input = readResourceFile("results12.txt");
+		List<FastaResult> results = new FastaResultParser().parse(input);
 		FastaResult result;
 		double r;
 
@@ -741,8 +742,8 @@ public class FastaResultParserTest {
 
 	@Test
 	public void testParseResultsTfastxMgstm1() throws FastaResultParserException {
-		Reader reader = readResourceFile("results_tfastx_mgstm1_1.txt");
-		List<FastaResult> results = new FastaResultParser(reader).parse();
+		String input = readResourceFile("results_tfastx_mgstm1_1.txt");
+		List<FastaResult> results = new FastaResultParser().parse(input);
 		FastaResult result;
 		double r;
 
@@ -776,8 +777,8 @@ public class FastaResultParserTest {
 
 	@Test
 	public void testParseResultsTfastxMgstm2() throws FastaResultParserException {
-		Reader reader = readResourceFile("results_tfastx_mgstm1_2.txt");
-		List<FastaResult> results = new FastaResultParser(reader).parse();
+		String input = readResourceFile("results_tfastx_mgstm1_2.txt");
+		List<FastaResult> results = new FastaResultParser().parse(input);
 		FastaResult result;
 		double r;
 
@@ -821,7 +822,8 @@ public class FastaResultParserTest {
 				   + ":::::::::-::::::::.: -::.::::::::", result.getConsensusLine());
 	}
 
-	private Reader readResourceFile(String name) {
-		return new InputStreamReader(FastaResultParserTest.class.getResourceAsStream(name));
+	private String readResourceFile(String name) {
+		return new BufferedReader(new InputStreamReader(FastaResultParserTest.class.getResourceAsStream(name))).lines()
+				.collect(Collectors.joining("\n"));
 	}
 }

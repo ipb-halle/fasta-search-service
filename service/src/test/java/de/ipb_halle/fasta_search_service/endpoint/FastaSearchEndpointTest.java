@@ -45,7 +45,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
-import de.ipb_halle.fasta_search_service.logger.LoggerProducer;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
@@ -80,7 +79,7 @@ public class FastaSearchEndpointTest {
 	private FastaSearchServiceMockImpl service;
 
 	@Module
-	@Classes(cdi = true, value = { FastaSearchEndpoint.class, FastaSearchServiceMockImpl.class, LoggerProducer.class })
+	@Classes(cdi = true, value = { FastaSearchEndpoint.class, FastaSearchServiceMockImpl.class })
 	public WebApp app() {
 		return new WebApp().contextRoot("test");
 	}

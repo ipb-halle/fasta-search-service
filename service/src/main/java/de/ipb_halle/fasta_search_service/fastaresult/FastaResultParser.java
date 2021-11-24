@@ -19,7 +19,7 @@ package de.ipb_halle.fasta_search_service.fastaresult;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -34,17 +34,13 @@ import de.ipb_halle.fasta_search_service.models.fastaresult.Frame;
 /**
  * Parser implementation for the output of sequence searches by the fasta36
  * suite with the parameter "-m 10".
+ * <p>
+ * It is safe to reuse objects of this class.
  * 
  * @author flange
  */
 public class FastaResultParser {
-	private final BufferedReader reader;
-
-	/**
-	 * @param in sequence search output
-	 */
-	public FastaResultParser(Reader in) {
-		reader = new BufferedReader(in);
+	public FastaResultParser() {
 	}
 
 	/*
@@ -114,21 +110,23 @@ public class FastaResultParser {
 	private static final Pattern ALIGNMENT_CONSENSUS_PATTERN = Pattern.compile("(;)[ ](al_cons)(:)");
 
 	/**
-	 * Parse the sequence search output from the {@link Reader} object delivered in
-	 * the constructor {@link #FastaResultParser(Reader)}.
+	 * Parse the sequence search output.
 	 * 
+	 * @param input sequence search output
 	 * @return list of results, not necessarily sorted by score
 	 * @throws FastaResultParserException
 	 */
-	public List<FastaResult> parse() throws FastaResultParserException {
+	public List<FastaResult> parse(String input) throws FastaResultParserException {
+		BufferedReader reader = new BufferedReader(new StringReader(input));
 		try {
-			return parseInput();
+			return parseInput(reader);
 		} catch (IOException | FastaResultBuilderException e) {
 			throw new FastaResultParserException(e);
 		}
 	}
 
-	private List<FastaResult> parseInput() throws FastaResultParserException, IOException, FastaResultBuilderException {
+	private List<FastaResult> parseInput(BufferedReader reader)
+			throws FastaResultParserException, IOException, FastaResultBuilderException {
 		List<FastaResult> results = new ArrayList<>();
 		String line;
 		String querySequenceName = null;

@@ -47,6 +47,13 @@ public class SearchFactoriesTest {
 	private File queryFile;
 	private ProgramExecutor mockProgramExecutor;
 
+	private class MockProgramExecutor extends ProgramExecutor {
+		@Override
+		public ProgramOutput execute() throws IOException {
+			return new ProgramOutput(0, String.join(" ", getCommandList()), "");
+		}
+	};
+
 	@Before
 	public void init() throws IOException {
 		libraryFile = createTempFile();
@@ -108,14 +115,14 @@ public class SearchFactoriesTest {
 	@Test
 	public void test_maxResults() throws IOException {
 		SearchFactory factory = new DNADNASearchFactory.Builder().build();
-		addMocksToFactory(factory);
+		mockProgramExecutor = new MockProgramExecutor();
 
-		factory.execSearch(queryFile, libraryFile, MYSQL);
+		factory.execSearch(queryFile, libraryFile, MYSQL, mockProgramExecutor);
 		assertThat(mockProgramExecutor.getCommandList(), hasItem("-d 50 -b 50"));
 
-		addMocksToFactory(factory);
 		assertSame(factory, factory.maxResults(1000));
-		factory.execSearch(queryFile, libraryFile, POSTGRES);
+		mockProgramExecutor = new MockProgramExecutor();
+		factory.execSearch(queryFile, libraryFile, POSTGRES, mockProgramExecutor);
 		assertThat(mockProgramExecutor.getCommandList(), hasItem("-d 1000 -b 1000"));
 	}
 
@@ -125,43 +132,28 @@ public class SearchFactoriesTest {
 		String expected;
 
 		factory = new DNADNASearchFactory.Builder().build();
-		addMocksToFactory(factory);
+		mockProgramExecutor = new MockProgramExecutor();
 		expected = "/usr/local/fasta36_mariadb/bin/fasta36 -q -m 10 -n -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
 				+ libraryFile.getAbsolutePath() + " 16";
-		assertEquals(expected, factory.execSearch(queryFile, libraryFile, MYSQL).getStdout());
+		assertEquals(expected, factory.execSearch(queryFile, libraryFile, MYSQL, mockProgramExecutor).getStdout());
 
 		factory = new DNAProteinSearchFactory.Builder().build();
-		addMocksToFactory(factory);
-		expected = "/usr/local/fasta36_postgresql/bin/fastx36 -q -m 10 -n -t 1 -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
-				+ libraryFile.getAbsolutePath() + " 17";
-		assertEquals(expected, factory.execSearch(queryFile, libraryFile, POSTGRES).getStdout());
+		mockProgramExecutor = new MockProgramExecutor();
+		expected = "/usr/local/fasta36_postgresql/bin/fastx36 -q -m 10 -n -t 1 -d 50 -b 50 "
+				+ queryFile.getAbsolutePath() + " " + libraryFile.getAbsolutePath() + " 17";
+		assertEquals(expected, factory.execSearch(queryFile, libraryFile, POSTGRES, mockProgramExecutor).getStdout());
 
 		factory = new ProteinDNASearchFactory.Builder().build();
-		addMocksToFactory(factory);
-		expected = "/usr/local/fasta36_mariadb/bin/tfastx36 -q -m 10 -p -t 1 -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
-				+ libraryFile.getAbsolutePath() + " 16";
-		assertEquals(expected, factory.execSearch(queryFile, libraryFile, MYSQL).getStdout());
+		mockProgramExecutor = new MockProgramExecutor();
+		expected = "/usr/local/fasta36_mariadb/bin/tfastx36 -q -m 10 -p -t 1 -d 50 -b 50 " + queryFile.getAbsolutePath()
+				+ " " + libraryFile.getAbsolutePath() + " 16";
+		assertEquals(expected, factory.execSearch(queryFile, libraryFile, MYSQL, mockProgramExecutor).getStdout());
 
 		factory = new ProteinProteinSearchFactory.Builder().build();
-		addMocksToFactory(factory);
-		expected = "/usr/local/fasta36_postgresql/bin/fasta36 -q -m 10 -p -d 50 -b 50 " + queryFile.getAbsolutePath() + " "
-				+ libraryFile.getAbsolutePath() + " 17";
-		assertEquals(expected, factory.execSearch(queryFile, libraryFile, POSTGRES).getStdout());
-	}
-
-	private void addMocksToFactory(SearchFactory factory) {
-		mockProgramExecutor = new ProgramExecutor() {
-			@Override
-			public ProgramOutput execute() throws IOException {
-				return new ProgramOutput(0, String.join(" ", getCommandList()), "");
-			}
-		};
-		factory.setProgramExecutorFactory(new ProgramExecutorFactory() {
-			@Override
-			public ProgramExecutor createNewInstance() {
-				return mockProgramExecutor;
-			}
-		});
+		mockProgramExecutor = new MockProgramExecutor();
+		expected = "/usr/local/fasta36_postgresql/bin/fasta36 -q -m 10 -p -d 50 -b 50 " + queryFile.getAbsolutePath()
+				+ " " + libraryFile.getAbsolutePath() + " 17";
+		assertEquals(expected, factory.execSearch(queryFile, libraryFile, POSTGRES, mockProgramExecutor).getStdout());
 	}
 
 	private File createTempFile() throws IOException {

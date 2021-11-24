@@ -45,7 +45,7 @@ public class ProgramExecutor {
 		return this;
 	}
 
-	List<String> getCommandList() {
+	protected List<String> getCommandList() {
 		return commandList;
 	}
 

@@ -20,15 +20,14 @@ package de.ipb_halle.fasta_search_service.service;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 import org.apache.commons.lang3.EnumUtils;
-
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParser;
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;
@@ -37,6 +36,7 @@ import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
 import de.ipb_halle.fasta_search_service.models.fastaresult.FastaResult;
 import de.ipb_halle.fasta_search_service.models.search.TranslationTable;
 import de.ipb_halle.fasta_search_service.search.LibraryFileFormat;
+import de.ipb_halle.fasta_search_service.search.ProgramExecutorFactory;
 import de.ipb_halle.fasta_search_service.search.ProgramOutput;
 import de.ipb_halle.fasta_search_service.search.SearchFactory;
 import de.ipb_halle.fasta_search_service.search.SearchMode;
@@ -44,18 +44,27 @@ import de.ipb_halle.fasta_search_service.search.SequenceType;
 import de.ipb_halle.fasta_search_service.util.FastaFileFormatUtils;
 
 /**
+ * Search service implementation.
  * 
  * @author flange
  */
 @Stateless
 public class FastaSearchServiceImpl implements FastaSearchService {
+	@Inject
+	private ProgramExecutorFactory programExecutorFactory;
+
+	@Inject
+	private FastaResultParser parser;
+
 	@Override
 	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
 			throws FastaResultParserException, InvalidFastaSearchRequestException, IOException,
 			ProgramExecutionException {
-		checkFastaSearchRequest(request);
+		validateRequestOrFail(request);
 
 		FastaSearchQuery searchQuery = request.getSearchQuery();
+		SearchMode mode = determineSearchModeOrFail(searchQuery.getQuerySequenceType(),
+				searchQuery.getLibrarySequenceType());
 		String querySequence = FastaFileFormatUtils.toFastaFileFormat(searchQuery.getQuerySequence());
 
 		FastaSearchResult result = null;
@@ -66,13 +75,6 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 			querySequenceFile = createQuerySequenceFile(querySequence);
 			libraryFile = createLibraryFile(request.getLibraryFile());
 
-			SearchMode mode = determineSearchMode(searchQuery.getQuerySequenceType(),
-					searchQuery.getLibrarySequenceType());
-			if (mode == null) {
-				throw new InvalidFastaSearchRequestException(
-						"Could not determine the search mode from the given querySequenceType and librarySequenceType.");
-			}
-
 			result = execSearchAndParseResults(libraryFile, format, querySequenceFile, mode, searchQuery);
 		} finally {
 			deleteFileIfNotNull(querySequenceFile);
@@ -82,7 +84,11 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 		return result;
 	}
 
-	private void checkFastaSearchRequest(FastaSearchRequest request) throws InvalidFastaSearchRequestException {
+	private void validateRequestOrFail(FastaSearchRequest request) throws InvalidFastaSearchRequestException {
+		if (request == null) {
+			throw new InvalidFastaSearchRequestException("Invalid request.");
+		}
+
 		FastaSearchQuery searchQuery = request.getSearchQuery();
 		if (searchQuery == null) {
 			throw new InvalidFastaSearchRequestException("Missing searchQuery.");
@@ -101,6 +107,20 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 		if ((libraryFile == null) || (libraryFile.isEmpty())) {
 			throw new InvalidFastaSearchRequestException("Invalid library file.");
 		}
+	}
+
+	private SearchMode determineSearchModeOrFail(String query, String library)
+			throws InvalidFastaSearchRequestException {
+		SequenceType querySequenceType = EnumUtils.getEnumIgnoreCase(SequenceType.class, query, null);
+		SequenceType librarySequenceType = EnumUtils.getEnumIgnoreCase(SequenceType.class, library, null);
+
+		SearchMode mode = SearchMode.getSearchModeForSequenceTypes(querySequenceType, librarySequenceType);
+		if (mode == null) {
+			throw new InvalidFastaSearchRequestException(
+					"Could not determine the search mode from the given querySequenceType and librarySequenceType.");
+		}
+
+		return mode;
 	}
 
 	private File createQuerySequenceFile(String querySequence) throws IOException {
@@ -131,13 +151,6 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 		}
 	}
 
-	private SearchMode determineSearchMode(String query, String library) {
-		SequenceType querySequenceType = EnumUtils.getEnumIgnoreCase(SequenceType.class, query, null);
-		SequenceType librarySequenceType = EnumUtils.getEnumIgnoreCase(SequenceType.class, library, null);
-
-		return SearchMode.getSearchModeForSequenceTypes(querySequenceType, librarySequenceType);
-	}
-
 	private FastaSearchResult execSearchAndParseResults(File libraryFile, LibraryFileFormat format,
 			File querySequenceFile, SearchMode searchMode, FastaSearchQuery searchQuery)
 			throws FastaResultParserException, ProgramExecutionException, IOException {
@@ -147,7 +160,7 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 		checkForErrors(fastaProgramOutput);
 
 		String output = fastaProgramOutput.getStdout();
-		List<FastaResult> parsedResults = new FastaResultParser(new StringReader(output)).parse();
+		List<FastaResult> parsedResults = parser.parse(output);
 
 		parsedResults = sortResultsListAndApplyMaxResults(parsedResults, searchQuery.getMaxResults());
 
@@ -168,7 +181,7 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 			factory.translationTable(translationTable);
 		}
 
-		return factory.execSearch(querySequenceFile, libraryFile, format);
+		return factory.execSearch(querySequenceFile, libraryFile, format, programExecutorFactory.createNewInstance());
 	}
 
 	private void checkForErrors(ProgramOutput fastaProgramOutput) throws ProgramExecutionException {

@@ -35,7 +35,6 @@ public abstract class SearchFactory {
 	private static final String PARAM_MAXRESULTS_FORMAT = "-d %d -b %d";
 
 	private int maxResults = 50;
-	private ProgramExecutorFactory programExecutorFactory = new ProgramExecutorFactory();
 
 	/**
 	 * @return name of the executable from the fasta36 program suite to be used for
@@ -69,24 +68,22 @@ public abstract class SearchFactory {
 		return this;
 	}
 
-	void setProgramExecutorFactory(ProgramExecutorFactory factory) {
-		this.programExecutorFactory = factory;
-	}
-
 	/**
 	 * Execute a sequence search.
 	 * 
 	 * @param queryFile
 	 * @param libraryFile
 	 * @param libraryFileFormat library format
+	 * @param programExecutor 
 	 * @return output of of the program execution
 	 * @throws IOException
 	 */
-	public ProgramOutput execSearch(File queryFile, File libraryFile, LibraryFileFormat libraryFileFormat) throws IOException {
+	public ProgramOutput execSearch(File queryFile, File libraryFile, LibraryFileFormat libraryFileFormat,
+			ProgramExecutor exec) throws IOException {
 		String program = libraryFileFormat.getBinDirectory() + "/" + getProgramName();
 
-		ProgramExecutor exec = programExecutorFactory.createNewInstance();
-		exec.addCommands(program, "-q", "-m", "10").addCommands(getParams())
+		exec.addCommands(program, "-q", "-m", "10")
+				.addCommands(getParams())
 				.addCommands(String.format(PARAM_MAXRESULTS_FORMAT, maxResults, maxResults))
 				.addCommands(queryFile.getAbsolutePath())
 				.addCommands(libraryFile.getAbsolutePath() + " " + Integer.toString(libraryFileFormat.getNumber()));
