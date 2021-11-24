@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -50,8 +49,8 @@ public class FastaSearchEndpoint {
 	@Inject
 	private FastaSearchService service;
 
-//	@Inject
-//	private Logger logger;
+	@Inject
+	private Logger logger;
 
 	@POST
 	@Path("searchPostgres")
@@ -86,7 +85,7 @@ public class FastaSearchEndpoint {
 		} catch (InvalidFastaSearchRequestException e) {
 			return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
 		} catch (FastaResultParserException | IOException | ProgramExecutionException e) {
-			//logger.severe(ExceptionUtils.getStackTrace(e));
+			logger.severe(ExceptionUtils.getStackTrace(e));
 			return Response.serverError().entity(e.getMessage()).build();
 		}
 	}

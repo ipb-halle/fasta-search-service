@@ -28,6 +28,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.EnumUtils;
+
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParser;
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;

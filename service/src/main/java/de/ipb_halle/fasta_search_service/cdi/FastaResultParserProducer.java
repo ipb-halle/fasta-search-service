@@ -15,9 +15,9 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.service;
+package de.ipb_halle.fasta_search_service.cdi;
 
-import javax.enterprise.inject.Alternative;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParser;
@@ -27,7 +27,7 @@ import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParser;
  * 
  * @author flange
  */
-@Alternative
+@Dependent
 public class FastaResultParserProducer {
 	/**
 	 * Produces a new {@link FastaResultParser} object.

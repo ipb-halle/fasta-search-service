@@ -15,22 +15,43 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.service;
+package de.ipb_halle.fasta_search_service.cdi;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 
+import javax.inject.Inject;
+
+import org.apache.openejb.jee.EjbJar;
+import org.apache.openejb.junit.ApplicationComposer;
+import org.apache.openejb.testing.Classes;
+import org.apache.openejb.testing.Module;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import de.ipb_halle.fasta_search_service.search.ProgramExecutorFactory;
+
 /**
  * @author flange
  */
+@RunWith(ApplicationComposer.class)
 public class ProgramExecutorFactoryProducerTest {
+	@Inject
+	private ProgramExecutorFactory obj1;
+
+	@Inject
+	private ProgramExecutorFactory obj2;
+
+	@Module
+	@Classes(cdi = true, value = { ProgramExecutorFactoryProducer.class })
+	public EjbJar app() {
+		return new EjbJar();
+	}
+
 	@Test
 	public void test_produce() {
-		ProgramExecutorFactoryProducer producer = new ProgramExecutorFactoryProducer();
-		ProgramExecutorFactory obj1 = producer.produce();
-		ProgramExecutorFactory obj2 = producer.produce();
+		assertNotNull(obj1);
+		assertNotNull(obj2);
 		assertNotSame(obj1, obj2);
 	}
 }

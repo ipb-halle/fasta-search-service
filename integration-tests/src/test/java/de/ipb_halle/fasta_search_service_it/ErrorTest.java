@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
-import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;
@@ -45,13 +44,11 @@ import de.ipb_halle.fasta_search_service_it.util.TestUtils;
  * @author flange
  */
 public class ErrorTest {
-	private static final String postgresImageName = "postgres:13";
 	private static final int dbPort = 5432;
 	private static final String dbName = "integration-tests-db";
 	private static final String user = "test";
 	private static final String password = "testpassword";
 	private static final String table = "sequences";
-	private static final String initScript = "init.sql";
 	private static final String endpointName = "searchPostgres";
 
 	private static String proteinLibraryFile = TestUtils.getLibraryFile("db", dbPort, dbName, user, password, table,

@@ -15,27 +15,32 @@
  * limitations under the License.
  * 
  */
-package de.ipb_halle.fasta_search_service.service;
+package de.ipb_halle.fasta_search_service.cdi;
 
-import javax.enterprise.inject.Alternative;
+import java.util.logging.Logger;
+
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
-
-import de.ipb_halle.fasta_search_service.search.ProgramExecutorFactory;
+import javax.enterprise.inject.spi.InjectionPoint;
 
 /**
- * CDI producer for {@link ProgramExecutorFactory} objects.
+ * CDI-Producer of logger objects.
  * 
  * @author flange
  */
-@Alternative
-public class ProgramExecutorFactoryProducer {
+/*
+ * Code from https://stackoverflow.com/a/21092326
+ */
+@Dependent
+public class LoggerProducer {
 	/**
-	 * Produces a new {@link ProgramExecutorFactory} object.
+	 * Produces a logger object.
 	 * 
-	 * @return new {@link ProgramExecutorFactory} object
+	 * @param p point where the logger object is to be injected
+	 * @return logger object
 	 */
 	@Produces
-	public ProgramExecutorFactory produce() {
-		return new ProgramExecutorFactory();
+	public Logger getLogger(InjectionPoint p) {
+		return Logger.getLogger(p.getClass().getCanonicalName());
 	}
 }
