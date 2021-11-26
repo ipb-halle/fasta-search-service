@@ -29,6 +29,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.EnumUtils;
 
+import de.ipb_halle.fasta_search_service.config.DatabaseConnectionConfigurationService;
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParser;
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;
@@ -57,11 +58,16 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 	@Inject
 	private FastaResultParser parser;
 
+	@Inject
+	private DatabaseConnectionConfigurationService dbConnectionService;
+
 	@Override
 	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
 			throws FastaResultParserException, InvalidFastaSearchRequestException, IOException,
 			ProgramExecutionException {
-		validateRequestOrFail(request);
+		FastaSearchRequestValidator.validateRequestOrFail(request);
+
+		String libraryFileString = determineLibraryFileStringOrFail(request);
 
 		FastaSearchQuery searchQuery = request.getSearchQuery();
 		SearchMode mode = determineSearchModeOrFail(searchQuery.getQuerySequenceType(),
@@ -74,7 +80,7 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 
 		try {
 			querySequenceFile = createQuerySequenceFile(querySequence);
-			libraryFile = createLibraryFile(request.getLibraryFile());
+			libraryFile = createLibraryFile(libraryFileString);
 
 			result = execSearchAndParseResults(libraryFile, format, querySequenceFile, mode, searchQuery);
 		} finally {
@@ -85,29 +91,25 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 		return result;
 	}
 
-	private void validateRequestOrFail(FastaSearchRequest request) throws InvalidFastaSearchRequestException {
-		if (request == null) {
-			throw new InvalidFastaSearchRequestException("Invalid request.");
+	private String determineLibraryFileStringOrFail(FastaSearchRequest request)
+			throws InvalidFastaSearchRequestException {
+		String dbConnectionString = determineDBConnectionString(request.getDatabaseConnectionString());
+		if (dbConnectionString == null) {
+			throw new InvalidFastaSearchRequestException(
+					"Unable to find database connection information in the search request or in the service configuration.");
 		}
 
-		FastaSearchQuery searchQuery = request.getSearchQuery();
-		if (searchQuery == null) {
-			throw new InvalidFastaSearchRequestException("Missing searchQuery.");
-		}
-		checkQuerySequence(searchQuery.getQuerySequence());
-		checkLibraryFile(request.getLibraryFile());
+		return dbConnectionString + "\n" + request.getDatabaseQueries();
 	}
 
-	private void checkQuerySequence(String querySequence) throws InvalidFastaSearchRequestException {
-		if ((querySequence == null) || (querySequence.isEmpty())) {
-			throw new InvalidFastaSearchRequestException("Invalid query sequence.");
+	private String determineDBConnectionString(String stringFromFastaSearchRequest) {
+		if ((stringFromFastaSearchRequest != null) && !stringFromFastaSearchRequest.isEmpty()) {
+			return stringFromFastaSearchRequest;
 		}
-	}
-
-	private void checkLibraryFile(String libraryFile) throws InvalidFastaSearchRequestException {
-		if ((libraryFile == null) || (libraryFile.isEmpty())) {
-			throw new InvalidFastaSearchRequestException("Invalid library file.");
+		if (dbConnectionService.hasConfig()) {
+			return dbConnectionService.getConnectionString();
 		}
+		return null;
 	}
 
 	private SearchMode determineSearchModeOrFail(String query, String library)

@@ -18,7 +18,11 @@
 package de.ipb_halle.fasta_search_service_it.util;
 
 import java.nio.file.Paths;
+import java.util.function.Consumer;
 
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.Network;
+import org.testcontainers.containers.output.OutputFrame;
 import org.testcontainers.images.builder.ImageFromDockerfile;
 
 /**
@@ -30,17 +34,19 @@ public class TestUtils {
 	private TestUtils() {
 	}
 
-	private static final String headerFormat = "%s:%d %s %s %s";
+	private static final String dbConnectionFormat = "%s:%d %s %s %s";
 	private static final String selectAllSequencesFormat = "SELECT id,sequence FROM %s WHERE sequencetype = '%s';";
 	private static final String selectDescriptionByIdFormat = "SELECT description FROM %s WHERE id=#;";
 	private static final String selectSequenceByIdFormat = "SELECT sequence FROM %s WHERE id=#;";
 
-	public static String getLibraryFile(String hostname, int port, String dbName, String user, String password,
+	public static String getDatabaseConnectionString(String hostname, int port, String dbName, String user, String password) {
+		return String.format(dbConnectionFormat, hostname, port, dbName, user, password);
+	}
+
+	public static String getDatabaseQueries(
 			String tableName, String sequenceType) {
 		StringBuilder sb = new StringBuilder(256);
 
-		sb.append(String.format(headerFormat, hostname, port, dbName, user, password));
-		sb.append("\n");
 		sb.append("DO SELECT 1;");
 		sb.append("\n");
 		sb.append(String.format(selectAllSequencesFormat, tableName, sequenceType));
@@ -60,5 +66,11 @@ public class TestUtils {
 		 */
 		return new ImageFromDockerfile().withDockerfilePath("Dockerfile").withFileFromPath(".",
 				Paths.get("").toAbsolutePath().getParent());
+	}
+
+	@SuppressWarnings("resource")
+	public static GenericContainer<?> getTestContainer(Network network, Consumer<OutputFrame> logConsumer) {
+		return new GenericContainer<>(getTestbuildImage()).withExposedPorts(8080).withNetwork(network)
+				.withLogConsumer(logConsumer);
 	}
 }

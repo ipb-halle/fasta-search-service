@@ -26,10 +26,15 @@ import org.junit.Test;
  */
 public class TestUtilsTest {
 	@Test
-	public void test_getLibraryFile() {
-		String libraryFile = TestUtils.getLibraryFile("dbHostname", 5432, "dbName", "dbUser", "dbPassword", "sequences", "XYZ");
+	public void test_getDatabaseConnectionString() {
+		String dbConnection = TestUtils.getDatabaseConnectionString("dbHostname", 5432, "dbName", "dbUser", "dbPassword");
+		assertEquals("dbHostname:5432 dbName dbUser dbPassword", dbConnection);
+	}
+
+	@Test
+	public void test_getDatabaseQueries() {
+		String libraryFile = TestUtils.getDatabaseQueries("sequences", "XYZ");
 		String expected = ""
-				+ "dbHostname:5432 dbName dbUser dbPassword\n"
 				+ "DO SELECT 1;\n"
 				+ "SELECT id,sequence FROM sequences WHERE sequencetype = 'XYZ';\n"
 				+ "SELECT description FROM sequences WHERE id=#;\n"

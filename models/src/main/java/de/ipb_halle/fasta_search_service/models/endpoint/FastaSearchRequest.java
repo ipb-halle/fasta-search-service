@@ -26,15 +26,24 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class FastaSearchRequest {
-	private String libraryFile;
+	private String databaseConnectionString;
+	private String databaseQueries;
 	private FastaSearchQuery searchQuery;
 
-	public String getLibraryFile() {
-		return libraryFile;
+	public String getDatabaseConnectionString() {
+		return databaseConnectionString;
 	}
 
-	public void setLibraryFile(String libraryFile) {
-		this.libraryFile = libraryFile;
+	public void setDatabaseConnectionString(String libraryFile) {
+		this.databaseConnectionString = libraryFile;
+	}
+
+	public String getDatabaseQueries() {
+		return databaseQueries;
+	}
+
+	public void setDatabaseQueries(String databaseQueries) {
+		this.databaseQueries = databaseQueries;
 	}
 
 	public FastaSearchQuery getSearchQuery() {
@@ -48,7 +57,8 @@ public class FastaSearchRequest {
 	@Override
 	public String toString() {
 		return "FastaSearchRequest ["
-				+ "\n  libraryFile=" + libraryFile
+				+ "\n  databaseConnectionString=" + databaseConnectionString
+				+ "\n  databaseQueries=" + databaseQueries
 				+ "\n, searchQuery=" + searchQuery
 				+ "\n]";
 	}

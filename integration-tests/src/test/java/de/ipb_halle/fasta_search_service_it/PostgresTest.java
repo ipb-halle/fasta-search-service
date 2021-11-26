@@ -56,9 +56,9 @@ public class PostgresTest {
 	private static final String initScript = "init.sql";
 	private static final String endpointName = "searchPostgres";
 
-	private static String dnaLibraryFile = TestUtils.getLibraryFile("db", dbPort, dbName, user, password, table, "DNA");
-	private static String proteinLibraryFile = TestUtils.getLibraryFile("db", dbPort, dbName, user, password, table,
-			"PROTEIN");
+	private static String dbConnection = TestUtils.getDatabaseConnectionString("db", dbPort, dbName, user, password);
+	private static String dnaQueries = TestUtils.getDatabaseQueries(table, "DNA");
+	private static String proteinQueries = TestUtils.getDatabaseQueries(table, "PROTEIN");
 
 	private static Logger logger = LoggerFactory.getLogger(PostgresTest.class);
 	private static Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(logger).withSeparateOutputStreams();
@@ -74,8 +74,7 @@ public class PostgresTest {
 			.withNetworkAliases("db").withLogConsumer(logConsumer);
 
 	@ClassRule
-	public static GenericContainer<?> fastaSearchContainer = new GenericContainer<>(TestUtils.getTestbuildImage())
-			.withExposedPorts(8080).withNetwork(network).withLogConsumer(logConsumer);
+	public static GenericContainer<?> fastaSearchContainer = TestUtils.getTestContainer(network, logConsumer);
 
 	@Before
 	public void init() {
@@ -102,7 +101,8 @@ public class PostgresTest {
 		query.setLibrarySequenceType("DNA");
 		FastaSearchRequest request = new FastaSearchRequest();
 		request.setSearchQuery(query);
-		request.setLibraryFile(dnaLibraryFile);
+		request.setDatabaseConnectionString(dbConnection);
+		request.setDatabaseQueries(dnaQueries);
 
 		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.json(request));
@@ -125,7 +125,8 @@ public class PostgresTest {
 		query.setLibrarySequenceType("protein");
 		FastaSearchRequest request = new FastaSearchRequest();
 		request.setSearchQuery(query);
-		request.setLibraryFile(proteinLibraryFile);
+		request.setDatabaseConnectionString(dbConnection);
+		request.setDatabaseQueries(proteinQueries);
 
 		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.xml(request));
@@ -148,7 +149,8 @@ public class PostgresTest {
 		query.setLibrarySequenceType("PROTEIN");
 		FastaSearchRequest request = new FastaSearchRequest();
 		request.setSearchQuery(query);
-		request.setLibraryFile(proteinLibraryFile);
+		request.setDatabaseConnectionString(dbConnection);
+		request.setDatabaseQueries(proteinQueries);
 
 		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_XML)
 				.post(Entity.json(request));
@@ -171,7 +173,8 @@ public class PostgresTest {
 		query.setLibrarySequenceType("dna");
 		FastaSearchRequest request = new FastaSearchRequest();
 		request.setSearchQuery(query);
-		request.setLibraryFile(dnaLibraryFile);
+		request.setDatabaseConnectionString(dbConnection);
+		request.setDatabaseQueries(dnaQueries);
 
 		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_XML)
 				.post(Entity.xml(request));
@@ -191,9 +194,9 @@ public class PostgresTest {
 		FastaSearchRequest request = new FastaSearchRequest();
 		request.setSearchQuery(query);
 
-		String libraryFile = TestUtils.getLibraryFile("db", dbPort, "wrongdatabase", user, password, table,
-				"PROTEIN");
-		request.setLibraryFile(libraryFile);
+		String dbConnection = TestUtils.getDatabaseConnectionString("db", dbPort, "wrongdatabase", user, password);
+		request.setDatabaseConnectionString(dbConnection);
+		request.setDatabaseQueries(proteinQueries);
 		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.xml(request));
 		assertEquals(Status.INTERNAL_SERVER_ERROR, Status.fromStatusCode(response.getStatus()));
@@ -212,9 +215,10 @@ public class PostgresTest {
 		FastaSearchRequest request = new FastaSearchRequest();
 		request.setSearchQuery(query);
 
-		String libraryFile = TestUtils.getLibraryFile("db", dbPort, dbName, user, password, "wrongtable",
-				"PROTEIN");
-		request.setLibraryFile(libraryFile);
+		String dbConnection = TestUtils.getDatabaseConnectionString("db", dbPort, dbName, user, password);
+		request.setDatabaseConnectionString(dbConnection);
+		String queries = TestUtils.getDatabaseQueries("wrongtable",	"PROTEIN");
+		request.setDatabaseQueries(queries);
 		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.xml(request));
 		assertEquals(Status.INTERNAL_SERVER_ERROR, Status.fromStatusCode(response.getStatus()));
@@ -231,10 +235,10 @@ public class PostgresTest {
 		query.setLibrarySequenceType("PROTEIN");
 		FastaSearchRequest request = new FastaSearchRequest();
 		request.setSearchQuery(query);
+		request.setDatabaseQueries(proteinQueries);
 
-		String libraryFile = TestUtils.getLibraryFile("db", dbPort, dbName, "wrongUser", password, table,
-				"PROTEIN");
-		request.setLibraryFile(libraryFile);
+		String dbConnection = TestUtils.getDatabaseConnectionString("db", dbPort, dbName, "wrongUser", password);
+		request.setDatabaseConnectionString(dbConnection);
 		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.xml(request));
 		assertEquals(Status.INTERNAL_SERVER_ERROR, Status.fromStatusCode(response.getStatus()));
@@ -242,14 +246,38 @@ public class PostgresTest {
 		assertThat(errorMessage, containsString("Connection to database 'integration-tests-db' failed"));
 		assertThat(errorMessage, containsString("password authentication failed for user \"wrongUser\""));
 
-		libraryFile = TestUtils.getLibraryFile("db", dbPort, dbName, user, "wrongPassword", table,
-				"PROTEIN");
-		request.setLibraryFile(libraryFile);
+		dbConnection = TestUtils.getDatabaseConnectionString("db", dbPort, dbName, user, "wrongPassword");
+		request.setDatabaseConnectionString(dbConnection);
 		response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.xml(request));
 		assertEquals(Status.INTERNAL_SERVER_ERROR, Status.fromStatusCode(response.getStatus()));
 		errorMessage = response.readEntity(String.class);
 		assertThat(errorMessage, containsString("Connection to database 'integration-tests-db' failed"));
 		assertThat(errorMessage, containsString("password authentication failed for user \"test\""));
+	}
+
+	@Test
+	public void test_noDatabaseConfiguration() {
+		String expectedError = "Unable to find database connection information in the search request or in the service configuration.";
+		FastaSearchQuery query = new FastaSearchQuery();
+		query.setQuerySequence(
+				"AAA");
+		query.setQuerySequenceType("PROTEIN");
+		query.setLibrarySequenceType("PROTEIN");
+		FastaSearchRequest request = new FastaSearchRequest();
+		request.setSearchQuery(query);
+		request.setDatabaseQueries(proteinQueries);
+
+		request.setDatabaseConnectionString(null);
+		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
+				.post(Entity.xml(request));
+		assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(response.getStatus()));
+		assertEquals(expectedError, response.readEntity(String.class));
+
+		request.setDatabaseConnectionString("");
+		response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
+				.post(Entity.xml(request));
+		assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(response.getStatus()));
+		assertEquals(expectedError, response.readEntity(String.class));
 	}
 }

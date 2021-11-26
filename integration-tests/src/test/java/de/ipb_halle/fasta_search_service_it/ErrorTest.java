@@ -35,7 +35,6 @@ import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
-
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
 import de.ipb_halle.fasta_search_service_it.util.TestUtils;
@@ -51,8 +50,8 @@ public class ErrorTest {
 	private static final String table = "sequences";
 	private static final String endpointName = "searchPostgres";
 
-	private static String proteinLibraryFile = TestUtils.getLibraryFile("db", dbPort, dbName, user, password, table,
-			"PROTEIN");
+	private static String dbConnection = TestUtils.getDatabaseConnectionString("db", dbPort, dbName, user, password);
+	private static String proteinQueries = TestUtils.getDatabaseQueries(table, "PROTEIN");
 
 	private static Logger logger = LoggerFactory.getLogger(ParameterTest.class);
 	private static Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(logger).withSeparateOutputStreams();
@@ -118,41 +117,43 @@ public class ErrorTest {
 	}
 
 	@Test
-	public void test_invalidQuerySequence() {
+	public void test_missingQuerySequence() {
 		FastaSearchRequest request = prepareRequest();
 		request.getSearchQuery().setQuerySequence(null);
 		Response response = execRequest(request);
-		assertInvalidQuerySequence(response);
+		assertMissingQuerySequence(response);
 
 		request.getSearchQuery().setQuerySequence("");
 		response = execRequest(request);
-		assertInvalidQuerySequence(response);
+		assertMissingQuerySequence(response);
 	}
 
-	private void assertInvalidQuerySequence(Response response) {
+	private void assertMissingQuerySequence(Response response) {
 		assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(response.getStatus()));
 		String errorMessage = response.readEntity(String.class);
-		assertEquals("Invalid query sequence.", errorMessage);
+		assertEquals("Missing query sequence.", errorMessage);
 	}
 
 	@Test
-	public void test_invalidLibraryFile() {
+	public void test_missingDatabaseConnectionString() {
 		FastaSearchRequest request = prepareRequest();
-		request.setLibraryFile(null);
+		request.setDatabaseConnectionString(null);
 		Response response = execRequest(request);
-		assertInvalidLibraryFile(response);
-		
-		request.setLibraryFile("");
+		assertMissingDatabaseConnectionString(response);
+
+		request.setDatabaseConnectionString("");
 		response = execRequest(request);
-		assertInvalidLibraryFile(response);
+		assertMissingDatabaseConnectionString(response);
 	}
-	
-	private void assertInvalidLibraryFile(Response response) {
+
+	private void assertMissingDatabaseConnectionString(Response response) {
 		assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(response.getStatus()));
 		String errorMessage = response.readEntity(String.class);
-		assertEquals("Invalid library file.", errorMessage);
+		assertEquals(
+				"Unable to find database connection information in the search request or in the service configuration.",
+				errorMessage);
 	}
-	
+
 	@Test
 	public void test_missingFastaSearchQuery() {
 		FastaSearchRequest request = prepareRequest();
@@ -170,7 +171,8 @@ public class ErrorTest {
 		query.setLibrarySequenceType("PROTEIN");
 		FastaSearchRequest request = new FastaSearchRequest();
 		request.setSearchQuery(query);
-		request.setLibraryFile(proteinLibraryFile);
+		request.setDatabaseConnectionString(dbConnection);
+		request.setDatabaseQueries(proteinQueries);
 
 		return request;
 	}

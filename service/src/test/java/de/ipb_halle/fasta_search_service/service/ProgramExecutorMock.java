@@ -18,8 +18,9 @@
 package de.ipb_halle.fasta_search_service.service;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
-
 import de.ipb_halle.fasta_search_service.search.ProgramExecutor;
 import de.ipb_halle.fasta_search_service.search.ProgramOutput;
 
@@ -28,10 +29,30 @@ import de.ipb_halle.fasta_search_service.search.ProgramOutput;
  */
 public class ProgramExecutorMock extends ProgramExecutor {
 	private SupplierWithException<ProgramOutput> behaviour;
+	private String libraryFileContent;
+	private String querySequenceFileContent;
 
 	@Override
 	public ProgramOutput execute() throws IOException {
+		readLibraryFile();
+		readQuerySequenceFile();
 		return behaviour.get();
+	}
+
+	private void readLibraryFile() throws IOException {
+		// name of the library file should be in the last command
+		String filename = getCommandList().get(getCommandList().size() - 1).split(" ")[0];
+		libraryFileContent = readFile(filename);
+	}
+
+	private void readQuerySequenceFile() throws IOException {
+		// name of the query sequence file should be in the next-to-last command
+		String filename = getCommandList().get(getCommandList().size() - 2).split(" ")[0];
+		querySequenceFileContent = readFile(filename);
+	}
+
+	private String readFile(String filename) throws IOException {
+		return new String(Files.readAllBytes(Paths.get(filename)));
 	}
 
 	@Override
@@ -41,6 +62,21 @@ public class ProgramExecutorMock extends ProgramExecutor {
 
 	public void setBehaviour(SupplierWithException<ProgramOutput> behaviour) {
 		this.behaviour = behaviour;
+	}
+
+	public String getLibraryFileContent() {
+		return libraryFileContent;
+	}
+
+	public String getQuerySequenceFileContent() {
+		return querySequenceFileContent;
+	}
+
+	public void reset() {
+		behaviour = null;
+		libraryFileContent = null;
+		querySequenceFileContent = null;
+		getCommandList().clear();
 	}
 
 	@FunctionalInterface

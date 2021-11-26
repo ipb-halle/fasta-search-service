@@ -66,7 +66,7 @@ public class FastaSearchEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response searchMariaDB(FastaSearchRequest request) {
 		throw new ServiceUnavailableException("MariaDB searches are not working.");
-		//return handleRequest(request, LibraryFileFormat.MYSQL);
+		//return handleRequest(request, LibraryFileFormat.MARIADB);
 	}
 
 	@POST

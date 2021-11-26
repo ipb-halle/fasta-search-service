@@ -31,9 +31,13 @@ public class FastaSearchRequestTest {
 	public void test_defaultsAndGettersAndSetters() {
 		FastaSearchRequest request = new FastaSearchRequest();
 
-		assertNull(request.getLibraryFile());
-		request.setLibraryFile("abc");
-		assertEquals("abc", request.getLibraryFile());
+		assertNull(request.getDatabaseConnectionString());
+		request.setDatabaseConnectionString("abc");
+		assertEquals("abc", request.getDatabaseConnectionString());
+
+		assertNull(request.getDatabaseQueries());
+		request.setDatabaseQueries("def");;
+		assertEquals("def", request.getDatabaseQueries());
 
 		assertNull(request.getSearchQuery());
 		FastaSearchQuery query = new FastaSearchQuery();

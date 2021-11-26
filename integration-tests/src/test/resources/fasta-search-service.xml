@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+	<Environment name="dbHostname" value="db1" type="java.lang.String" override="true" />
+	<Environment name="dbPort" value="5432" type="java.lang.Integer" override="true" />
+	<Environment name="dbName" value="integration-tests-db" type="java.lang.String" override="true" />
+	<Environment name="dbUser" value="test" type="java.lang.String" override="true" />
+	<Environment name="dbPassword" value="testpassword" type="java.lang.String" override="true" />
+</Context>

@@ -24,7 +24,9 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import de.ipb_halle.fasta_search_service.config.DatabaseConnectionConfigurationService;
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
@@ -60,12 +63,15 @@ public class FastaSearchServiceImplTest {
 	@Inject
 	private FastaSearchService service;
 
+	@Inject
+	private DatabaseConnectionConfigurationService dbConfigurationService;
+
 	private ProgramExecutorMock programExecutorMock = ProgramExecutorFactoryMockProducer.getMockinstance();
 	private FastaResultParserMock fastaResultParserMock = FastaResultParserMockProducer.getInstance();
 
 	@Module
-	@Classes(cdi = true, value = { FastaSearchServiceImpl.class, ProgramExecutorFactoryMockProducer.class,
-			FastaResultParserMockProducer.class })
+	@Classes(cdi = true, value = { FastaSearchServiceImpl.class, DatabaseConnectionConfigurationService.class,
+			ProgramExecutorFactoryMockProducer.class, FastaResultParserMockProducer.class })
 	public EjbJar app() {
 		return new EjbJar();
 	}
@@ -79,11 +85,11 @@ public class FastaSearchServiceImplTest {
 		query.setTranslationTable(1);
 		query.setMaxResults(10);
 		request = new FastaSearchRequest();
-		request.setLibraryFile("mylibraryfile");
+		request.setDatabaseConnectionString("connect to my db!");
+		request.setDatabaseQueries("SELECT * FROM sequences;");
 		request.setSearchQuery(query);
 
-		programExecutorMock.setBehaviour(null);
-		programExecutorMock.getCommandList().clear();
+		programExecutorMock.reset();
 		fastaResultParserMock.setBehaviour(null);
 	}
 
@@ -100,19 +106,34 @@ public class FastaSearchServiceImplTest {
 
 		request.setSearchQuery(new FastaSearchQuery());
 		e = assertThrows(InvalidFastaSearchRequestException.class, () -> service.search(request, POSTGRES));
-		assertEquals("Invalid query sequence.", e.getMessage());
+		assertEquals("Missing query sequence.", e.getMessage());
 
 		request.getSearchQuery().setQuerySequence("");
 		e = assertThrows(InvalidFastaSearchRequestException.class, () -> service.search(request, MYSQL));
-		assertEquals("Invalid query sequence.", e.getMessage());
+		assertEquals("Missing query sequence.", e.getMessage());
 
 		request.getSearchQuery().setQuerySequence("abc");
 		e = assertThrows(InvalidFastaSearchRequestException.class, () -> service.search(request, POSTGRES));
-		assertEquals("Invalid library file.", e.getMessage());
+		assertEquals("Missing database queries.", e.getMessage());
 
-		request.setLibraryFile("");
+		request.setDatabaseQueries("");
 		e = assertThrows(InvalidFastaSearchRequestException.class, () -> service.search(request, MYSQL));
-		assertEquals("Invalid library file.", e.getMessage());
+		assertEquals("Missing database queries.", e.getMessage());
+	}
+
+	@Test
+	public void test_search_noDatabaseConnectionString() {
+		String errorMsg = "Unable to find database connection information in the search request or in the service configuration.";
+		assertFalse(dbConfigurationService.hasConfig());
+
+		request.setDatabaseConnectionString(null);
+		InvalidFastaSearchRequestException e = assertThrows(InvalidFastaSearchRequestException.class,
+				() -> service.search(request, POSTGRES));
+		assertEquals(errorMsg, e.getMessage());
+
+		request.setDatabaseConnectionString("");
+		e = assertThrows(InvalidFastaSearchRequestException.class, () -> service.search(request, MYSQL));
+		assertEquals(errorMsg, e.getMessage());
 	}
 
 	@Test
@@ -242,6 +263,46 @@ public class FastaSearchServiceImplTest {
 				startsWith("/usr/local/fasta36_postgresql/bin/fastx36 -q -m 10 -n -t 1 -d 50 -b 50"));
 		assertThat(result.getProgramOutput(), endsWith("17"));
 		programExecutorMock.getCommandList().clear();
+	}
+
+	@Test
+	public void test_search_checkQuerySequenceFile() throws FastaResultParserException,
+			InvalidFastaSearchRequestException, IOException, ProgramExecutionException {
+		fastaResultParserMock.setBehaviour(input -> new ArrayList<>());
+		programExecutorMock.setBehaviour(() -> new ProgramOutput(0, "", ""));
+
+		result = service.search(request, POSTGRES);
+		assertEquals(programExecutorMock.getQuerySequenceFileContent(), ">query\nAGCTGA");
+	}
+
+	@Test
+	public void test_search_checkLibraryFileWithDifferentConfigurations() throws FastaResultParserException,
+			InvalidFastaSearchRequestException, IOException, ProgramExecutionException {
+		fastaResultParserMock.setBehaviour(input -> new ArrayList<>());
+		programExecutorMock.setBehaviour(() -> new ProgramOutput(0, "", ""));
+
+		assertFalse(dbConfigurationService.hasConfig());
+		result = service.search(request, POSTGRES);
+		assertEquals(programExecutorMock.getLibraryFileContent(), "connect to my db!\nSELECT * FROM sequences;");
+
+		programExecutorMock.reset();
+		programExecutorMock.setBehaviour(() -> new ProgramOutput(0, "", ""));
+		dbConfigurationService.setDbHostname("dbhost");
+		dbConfigurationService.setDbPort(1234);
+		dbConfigurationService.setDbName("dbname");
+		dbConfigurationService.setDbUser("user");
+		dbConfigurationService.setDbPassword("pw");
+		dbConfigurationService.init();
+		assertTrue(dbConfigurationService.hasConfig());
+		result = service.search(request, POSTGRES);
+		assertEquals(programExecutorMock.getLibraryFileContent(), "connect to my db!\nSELECT * FROM sequences;");
+
+		programExecutorMock.reset();
+		programExecutorMock.setBehaviour(() -> new ProgramOutput(0, "", ""));
+		request.setDatabaseConnectionString(null);
+		result = service.search(request, POSTGRES);
+		assertEquals(programExecutorMock.getLibraryFileContent(),
+				"dbhost:1234 dbname user pw\nSELECT * FROM sequences;");
 	}
 
 	@Test

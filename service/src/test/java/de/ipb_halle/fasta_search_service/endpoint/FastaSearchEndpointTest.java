@@ -45,6 +45,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import de.ipb_halle.fasta_search_service.cdi.LoggerProducer;
+import de.ipb_halle.fasta_search_service.config.DatabaseConnectionConfigurationService;
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
@@ -80,7 +81,8 @@ public class FastaSearchEndpointTest {
 	private FastaSearchServiceMockImpl service;
 
 	@Module
-	@Classes(cdi = true, value = { FastaSearchEndpoint.class, FastaSearchServiceMockImpl.class, LoggerProducer.class })
+	@Classes(cdi = true, value = { FastaSearchEndpoint.class, FastaSearchServiceMockImpl.class,
+			DatabaseConnectionConfigurationService.class, LoggerProducer.class })
 	public WebApp app() {
 		return new WebApp().contextRoot("test");
 	}
@@ -96,16 +98,16 @@ public class FastaSearchEndpointTest {
 		query.setTranslationTable(1);
 		query.setMaxResults(10);
 		request = new FastaSearchRequest();
-		request.setLibraryFile("mylibraryfile");
+		request.setDatabaseConnectionString("connect to my db!");
 		request.setSearchQuery(query);
 
 		result1 = new FastaResult();
 		result1.setOverlap(42);
 		result2 = new FastaResult();
-		result1.setConsensusLine(":.:");
+		result2.setConsensusLine(":.:");
 
 		service.setBehaviour(
-				request -> new FastaSearchResult(Arrays.asList(result1, result2), request.getLibraryFile()));
+				request -> new FastaSearchResult(Arrays.asList(result1, result2), request.getDatabaseConnectionString()));
 
 		client = ClientBuilder.newClient();
 	}
@@ -121,7 +123,7 @@ public class FastaSearchEndpointTest {
 		assertThat(searchResult.getResults(), hasSize(2));
 		assertEquals(result1, searchResult.getResults().get(0));
 		assertEquals(result2, searchResult.getResults().get(1));
-		assertEquals("mylibraryfile", searchResult.getProgramOutput());
+		assertEquals("connect to my db!", searchResult.getProgramOutput());
 	}
 
 	/*

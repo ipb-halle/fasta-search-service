@@ -24,6 +24,7 @@ package de.ipb_halle.fasta_search_service.search;
  */
 public enum LibraryFileFormat {
 	MYSQL(16, "/usr/local/fasta36_mariadb/bin"),
+	MARIADB(16, "/usr/local/fasta36_mariadb/bin"),
 	POSTGRES(17, "/usr/local/fasta36_postgresql/bin");
 
 	private final int number;

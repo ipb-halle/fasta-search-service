@@ -18,12 +18,8 @@
 package de.ipb_halle.fasta_search_service_it;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.emptyString;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -32,7 +28,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -42,28 +37,26 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.testcontainers.utility.MountableFile;
 
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchQuery;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
-import de.ipb_halle.fasta_search_service.models.fastaresult.FastaResult;
-import de.ipb_halle.fasta_search_service.models.search.TranslationTable;
 import de.ipb_halle.fasta_search_service_it.util.TestUtils;
 
 /**
  * @author flange
  */
-public class ParameterTest {
+public class DBConfigurationTest {
 	private static final String postgresImageName = "postgres:13";
 	private static final int dbPort = 5432;
 	private static final String dbName = "integration-tests-db";
 	private static final String user = "test";
 	private static final String password = "testpassword";
 	private static final String table = "sequences";
-	private static final String initScript = "init.sql";
 	private static final String endpointName = "searchPostgres";
 
-	private static String dbConnection = TestUtils.getDatabaseConnectionString("db", dbPort, dbName, user, password);
+	private static String dbConnection2 = TestUtils.getDatabaseConnectionString("db2", dbPort, dbName, user, password);
 	private static String proteinQueries = TestUtils.getDatabaseQueries(table, "PROTEIN");
 
 	private static Logger logger = LoggerFactory.getLogger(ParameterTest.class);
@@ -75,13 +68,20 @@ public class ParameterTest {
 	private static Network network = Network.newNetwork();
 
 	@ClassRule
-	public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(postgresImageName).withDatabaseName(dbName)
-			.withUsername(user).withPassword(password).withInitScript(initScript).withNetwork(network)
-			.withNetworkAliases("db").withLogConsumer(logConsumer);
+	public static PostgreSQLContainer<?> postgres1 = new PostgreSQLContainer<>(postgresImageName)
+			.withDatabaseName(dbName).withUsername(user).withPassword(password).withInitScript("init.sql")
+			.withNetwork(network).withNetworkAliases("db1").withLogConsumer(logConsumer);
+
+	@ClassRule
+	public static PostgreSQLContainer<?> postgres2 = new PostgreSQLContainer<>(postgresImageName)
+			.withDatabaseName(dbName).withUsername(user).withPassword(password).withInitScript("init_emptyTable.sql")
+			.withNetwork(network).withNetworkAliases("db2").withLogConsumer(logConsumer);
 
 	@ClassRule
 	public static GenericContainer<?> fastaSearchContainer = new GenericContainer<>(TestUtils.getTestbuildImage())
-			.withExposedPorts(8080).withNetwork(network).withLogConsumer(logConsumer);
+			.withExposedPorts(8080).withNetwork(network).withLogConsumer(logConsumer)
+			.withCopyFileToContainer(MountableFile.forClasspathResource("fasta-search-service.xml"),
+					"/usr/local/tomee/conf/Catalina/localhost/");
 
 	@Before
 	public void init() {
@@ -90,93 +90,50 @@ public class ParameterTest {
 		client = ClientBuilder.newClient();
 	}
 
-	@After
-	public void tearDown() {
-		client.close();
-	}
-
 	@Test
-	public void test_maxResults() {
+	public void test_withoutDatabaseConnectionString_useContainerConfiguration() {
 		FastaSearchQuery query = new FastaSearchQuery();
-		query.setQuerySequence(
-				"SAVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA");
+		/*
+		 * example from fasta-search-service/service/src/test/resources/de/ipb_halle/
+		 * fasta_search_service/fastaresult/query7.fasta
+		 */
+		query.setQuerySequence("SAVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA");
 		query.setQuerySequenceType("PROTEIN");
 		query.setLibrarySequenceType("PROTEIN");
-		query.setMaxResults(0);
 		FastaSearchRequest request = new FastaSearchRequest();
 		request.setSearchQuery(query);
-		request.setDatabaseConnectionString(dbConnection);
 		request.setDatabaseQueries(proteinQueries);
 
+		request.setDatabaseConnectionString(null);
 		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.json(request));
-
 		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
 		FastaSearchResult searchResult = response.readEntity(FastaSearchResult.class);
-		// maxResults <= 0 does not override the default
-		String firstLine = searchResult.getProgramOutput().split("\n")[0];
-		assertThat(firstLine, containsString("-b 50"));
-		assertThat(firstLine, containsString("-d 50"));
-		assertTrue(searchResult.getResults().size() > 1);
+		FastaSearchResultAssertions.assertProteinSearchInProteinLibraryResult(searchResult);
 
-		query.setMaxResults(3);
+		request.setDatabaseConnectionString("");
 		response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.json(request));
 		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
 		searchResult = response.readEntity(FastaSearchResult.class);
-		assertThat(searchResult.getProgramOutput(), not(emptyString()));
-		firstLine = searchResult.getProgramOutput().split("\n")[0];
-		assertThat(firstLine, containsString("-b 3"));
-		assertThat(firstLine, containsString("-d 3"));
-		assertThat(searchResult.getResults(), hasSize(3));
+		FastaSearchResultAssertions.assertProteinSearchInProteinLibraryResult(searchResult);
 	}
 
 	@Test
-	public void test_translationTable() {
+	public void test_withDatabaseConnectionString() {
 		FastaSearchQuery query = new FastaSearchQuery();
-		query.setQuerySequence(
-				"agcgcggtgcagcagaaactggcggcgctggaaaaaagcagcggcggccgcctgggcgtg"
-				+ "gcgctgattgataccgcggataacacccaggtgctgtatcgcggcgatgaacgctttccg"
-				+ "atgtgcagcaccagcaaagtgatggcggcg");
-		query.setQuerySequenceType("DNA");
+		query.setQuerySequence("SAVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA");
+		query.setQuerySequenceType("PROTEIN");
 		query.setLibrarySequenceType("PROTEIN");
 		FastaSearchRequest request = new FastaSearchRequest();
 		request.setSearchQuery(query);
-		request.setDatabaseConnectionString(dbConnection);
 		request.setDatabaseQueries(proteinQueries);
 
-		// Default translation table is STANDARD.
+		request.setDatabaseConnectionString(dbConnection2);
 		Response response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
 				.post(Entity.json(request));
-		assertStandardTranslationTable(response);
-
-		// Try with a different translation table.
-		query.setTranslationTable(TranslationTable.ECHINODERM_MITOCHONDRIAL_FLATWORM_MITOCHONDRIAL.getId());
-		response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
-				.post(Entity.json(request));
-
 		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
 		FastaSearchResult searchResult = response.readEntity(FastaSearchResult.class);
-		assertThat(searchResult.getProgramOutput(), not(emptyString()));
-		assertThat(searchResult.getProgramOutput().split("\n")[0], containsString("\"-t 9\""));
-
-		FastaResult firstResult = searchResult.getResults().get(0);
-		assertEquals("SAVQQNLAALENSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSNVMAA", firstResult.getQueryAlignmentLine());
-
-		// Unknown translation table id: uses STANDARD
-		query.setTranslationTable(-100);
-		response = client.target(uri).path(endpointName).request().accept(MediaType.APPLICATION_JSON)
-				.post(Entity.json(request));
-		assertStandardTranslationTable(response);
-	}
-
-	private void assertStandardTranslationTable(Response response) {
-		assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
-		FastaSearchResult searchResult = response.readEntity(FastaSearchResult.class);
-		assertThat(searchResult.getProgramOutput(), not(emptyString()));
-		assertThat(searchResult.getProgramOutput().split("\n")[0], containsString("\"-t 1\""));
-
-		FastaResult firstResult = searchResult.getResults().get(0);
-		assertEquals("SAVQQKLAALEKSSGGRLGVALIDTADNTQVLYRGDERFPMCSTSKVMAA", firstResult.getQueryAlignmentLine());
+		assertThat(searchResult.getResults(), empty());
 	}
 }
