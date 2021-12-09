@@ -19,6 +19,7 @@ package de.ipb_halle.fasta_search_service.util;
 
 import static de.ipb_halle.fasta_search_service.util.FastaFileFormatUtils.toFastaFileFormat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
@@ -38,10 +39,6 @@ public class FastaFileFormatUtilsTest {
 
 		input = "ABCDEF";
 		expected = ">query\nABCDEF";
-		assertEquals(expected, toFastaFileFormat(input));
-
-		input = ">ABCDEF";
-		expected = ">query\n>ABCDEF";
 		assertEquals(expected, toFastaFileFormat(input));
 
 		input = ">ABCDEF\n";
@@ -79,5 +76,17 @@ public class FastaFileFormatUtilsTest {
 		input = "\r\nABCDEF\r\nGHI";
 		expected = ">query\r\nABCDEF\r\nGHI";
 		assertEquals(expected, toFastaFileFormat(input));
+	}
+
+	// See https://github.com/wrpearson/fasta36/issues/38
+	@Test
+	public void test_inFastaFormat_fasta36Issue38() {
+		String input;
+
+		input = ">query";
+		assertNull(toFastaFileFormat(input));
+
+		input = ">query\nSAVQQKLAALEKSSGGRLG\n>VALIDTADNTQVLYRGDERFPMCSTSKVMAA";
+		assertNull(toFastaFileFormat(input));
 	}
 }

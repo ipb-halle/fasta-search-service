@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
  * @author flange
  */
 public class FastaFileFormatUtils {
+	private static final Pattern malformedRegex = Pattern.compile("^(\r|\n|.)*>.*$");
 	private static final Pattern fastaHeaderRegex = Pattern.compile(">.*(\r|\n|\r\n).*", Pattern.DOTALL);
 	private static final Pattern startsWithNewlineRegex = Pattern.compile("(\r|\n|\r\n).*", Pattern.DOTALL);
 
@@ -37,16 +38,22 @@ public class FastaFileFormatUtils {
 	 * if necessary.
 	 * 
 	 * @param input
-	 * @return input in FASTA file format, or {@code null} if the input was {@code null}
+	 * @return input in FASTA file format, or {@code null} if the input is {@code null} or is malformed
 	 */
 	public static String toFastaFileFormat(String input) {
 		if (input == null) {
+			return null;
+		} else if (isMalformed(input)) {
 			return null;
 		} else if (isInFastaFormat(input)) {
 			return input;
 		} else {
 			return withFastaHeader(input);
 		}
+	}
+
+	private static boolean isMalformed(String input) {
+		return malformedRegex.matcher(input).matches();
 	}
 
 	private static boolean isInFastaFormat(String input) {

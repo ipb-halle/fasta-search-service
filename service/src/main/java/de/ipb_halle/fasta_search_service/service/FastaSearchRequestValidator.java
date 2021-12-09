@@ -59,4 +59,16 @@ public class FastaSearchRequestValidator {
 			throw new InvalidFastaSearchRequestException("Missing database queries.");
 		}
 	}
+
+	/**
+	 * Validate the query sequence.
+	 * 
+	 * @param querySequence
+	 * @throws InvalidFastaSearchRequestException in case {@code querySequence} is {@code null}
+	 */
+	public static void validateQuerySequenceOrFail(String querySequence) throws InvalidFastaSearchRequestException {
+		if ((querySequence == null) || querySequence.isEmpty()) {
+			throw new InvalidFastaSearchRequestException("Malformed query sequence.");
+		}
+	}
 }

@@ -72,7 +72,9 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 		FastaSearchQuery searchQuery = request.getSearchQuery();
 		SearchMode mode = determineSearchModeOrFail(searchQuery.getQuerySequenceType(),
 				searchQuery.getLibrarySequenceType());
+
 		String querySequence = FastaFileFormatUtils.toFastaFileFormat(searchQuery.getQuerySequence());
+		FastaSearchRequestValidator.validateQuerySequenceOrFail(querySequence);
 
 		FastaSearchResult result = null;
 		File querySequenceFile = null;
