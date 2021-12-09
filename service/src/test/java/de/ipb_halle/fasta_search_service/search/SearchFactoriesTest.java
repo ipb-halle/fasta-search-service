@@ -38,6 +38,7 @@ import de.ipb_halle.fasta_search_service.search.factories.DNADNASearchFactory;
 import de.ipb_halle.fasta_search_service.search.factories.DNAProteinSearchFactory;
 import de.ipb_halle.fasta_search_service.search.factories.ProteinDNASearchFactory;
 import de.ipb_halle.fasta_search_service.search.factories.ProteinProteinSearchFactory;
+import de.ipb_halle.fasta_search_service.service.ProgramExecutionException;
 
 /**
  * @author flange
@@ -113,7 +114,7 @@ public class SearchFactoriesTest {
 	}
 
 	@Test
-	public void test_maxResults() throws IOException {
+	public void test_maxResults() throws IOException, ProgramExecutionException {
 		SearchFactory factory = new DNADNASearchFactory.Builder().build();
 		mockProgramExecutor = new MockProgramExecutor();
 
@@ -127,7 +128,7 @@ public class SearchFactoriesTest {
 	}
 
 	@Test
-	public void test_execSearch() throws IOException {
+	public void test_execSearch() throws IOException, ProgramExecutionException {
 		SearchFactory factory;
 		String expected;
 

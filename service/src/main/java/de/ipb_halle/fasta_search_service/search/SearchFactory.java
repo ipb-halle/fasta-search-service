@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 
 import de.ipb_halle.fasta_search_service.models.search.TranslationTable;
+import de.ipb_halle.fasta_search_service.service.ProgramExecutionException;
 
 /**
  * Prototype class responsible for a building parameter list for the fasta36
@@ -77,9 +78,10 @@ public abstract class SearchFactory {
 	 * @param programExecutor 
 	 * @return output of of the program execution
 	 * @throws IOException
+	 * @throws ProgramExecutionException in case the process execution took too long
 	 */
 	public ProgramOutput execSearch(File queryFile, File libraryFile, LibraryFileFormat libraryFileFormat,
-			ProgramExecutor exec) throws IOException {
+			ProgramExecutor exec) throws IOException, ProgramExecutionException {
 		String program = libraryFileFormat.getBinDirectory() + "/" + getProgramName();
 
 		exec.addCommands(program, "-q", "-m", "10")

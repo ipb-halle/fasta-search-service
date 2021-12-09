@@ -19,7 +19,7 @@ package de.ipb_halle.fasta_search_service.endpoint;
 
 import java.io.IOException;
 import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;
@@ -31,8 +31,8 @@ import de.ipb_halle.fasta_search_service.service.ProgramExecutionException;
 /**
  * @author flange
  */
-@Stateless
 @LocalBean
+@Singleton
 public class FastaSearchServiceMockImpl implements FastaSearchService {
 	private FunctionWithExceptions<FastaSearchRequest, FastaSearchResult> behaviour;
 

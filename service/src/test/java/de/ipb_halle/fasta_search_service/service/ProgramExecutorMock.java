@@ -33,7 +33,7 @@ public class ProgramExecutorMock extends ProgramExecutor {
 	private String querySequenceFileContent;
 
 	@Override
-	public ProgramOutput execute() throws IOException {
+	public ProgramOutput execute() throws IOException, ProgramExecutionException {
 		readLibraryFile();
 		readQuerySequenceFile();
 		return behaviour.get();
@@ -81,6 +81,6 @@ public class ProgramExecutorMock extends ProgramExecutor {
 
 	@FunctionalInterface
 	public interface SupplierWithException<T> {
-		public T get() throws IOException;
+		public T get() throws IOException, ProgramExecutionException;
 	}
 }

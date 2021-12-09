@@ -171,7 +171,7 @@ public class FastaSearchServiceImpl implements FastaSearchService {
 	}
 
 	private ProgramOutput execFastaProgram(File libraryFile, LibraryFileFormat format, File querySequenceFile,
-			SearchMode searchMode, FastaSearchQuery searchQuery) throws IOException {
+			SearchMode searchMode, FastaSearchQuery searchQuery) throws IOException, ProgramExecutionException {
 		SearchFactory factory = searchMode.getNewSearchFactory();
 
 		int maxResults = searchQuery.getMaxResults();

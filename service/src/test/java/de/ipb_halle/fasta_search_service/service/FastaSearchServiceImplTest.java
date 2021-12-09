@@ -162,6 +162,15 @@ public class FastaSearchServiceImplTest {
 	}
 
 	@Test
+	public void test_search_programExecutorThrowsProgramExecutionException() {
+		programExecutorMock.setBehaviour(() -> {
+			throw new ProgramExecutionException("oops");
+		});
+		ProgramExecutionException e = assertThrows(ProgramExecutionException.class, () -> service.search(request, POSTGRES));
+		assertEquals("oops", e.getMessage());
+	}
+
+	@Test
 	public void test_search_programExecutorReturnsError() {
 		programExecutorMock.setBehaviour(() -> new ProgramOutput(1, "stdout", "something's wrong"));
 		ProgramExecutionException e = assertThrows(ProgramExecutionException.class,

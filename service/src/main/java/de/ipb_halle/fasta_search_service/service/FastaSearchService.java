@@ -45,7 +45,8 @@ public interface FastaSearchService {
 	 *                                            is invalid
 	 * @throws IOException                        in case an I/O error occurred
 	 * @throws ProgramExecutionException          in case the fasta program returns
-	 *                                            a failure
+	 *                                            a failure or process execution
+	 *                                            took too long
 	 */
 	public FastaSearchResult search(FastaSearchRequest request, LibraryFileFormat format)
 			throws FastaResultParserException, InvalidFastaSearchRequestException, IOException,

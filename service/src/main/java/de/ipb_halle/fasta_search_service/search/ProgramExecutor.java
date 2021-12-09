@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.concurrent.TimeUnit;
+import de.ipb_halle.fasta_search_service.service.ProgramExecutionException;
 
 /**
  * Executes a process according to the enqueued commands.
@@ -54,13 +56,19 @@ public class ProgramExecutor {
 	 * 
 	 * @return output of the program execution
 	 * @throws IOException
+	 * @throws ProgramExecutionException in case the process execution took too long
 	 */
-	public ProgramOutput execute() throws IOException {
+	public ProgramOutput execute() throws IOException, ProgramExecutionException {
 		ProcessBuilder builder = new ProcessBuilder(commandList);
 		Process process = builder.start();
 
 		try {
-			process.waitFor();
+			boolean processExitedBeforeTimeout = process.waitFor(30, TimeUnit.SECONDS);
+
+			if (!processExitedBeforeTimeout && process.isAlive()) {
+				process.destroy();
+				throw new ProgramExecutionException("Program execution failed due to timeout.");
+			}
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
