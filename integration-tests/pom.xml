@@ -125,10 +125,14 @@
 			<version>2.7.4</version>
 			<scope>test</scope>
 		</dependency>
+		<!--
+		This version has a vulnerable sub-dependency (protobuf-java:3.11.4).
+		We do not use it at the moment anyways, because MySQLTest is ignored for other reasons.
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.27</version>
 		</dependency>
+		-->
 	</dependencies>
 </project>
