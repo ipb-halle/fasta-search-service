@@ -34,8 +34,8 @@ public class FastaSearchRequest {
 		return databaseConnectionString;
 	}
 
-	public void setDatabaseConnectionString(String libraryFile) {
-		this.databaseConnectionString = libraryFile;
+	public void setDatabaseConnectionString(String databaseConnectionString) {
+		this.databaseConnectionString = databaseConnectionString;
 	}
 
 	public String getDatabaseQueries() {
