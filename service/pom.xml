@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>de.ipb-halle</groupId>
 		<artifactId>fasta-search-service-parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0</version>
 	</parent>
 
 	<artifactId>fasta-search-service</artifactId>
@@ -49,7 +49,7 @@
 		<dependency>
 			<groupId>de.ipb-halle</groupId>
 			<artifactId>fasta-search-service-models</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.platform</groupId>

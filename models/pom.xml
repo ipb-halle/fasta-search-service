@@ -6,7 +6,7 @@
 
 	<groupId>de.ipb-halle</groupId>
 	<artifactId>fasta-search-service-models</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>fasta-search-service-models</name>
