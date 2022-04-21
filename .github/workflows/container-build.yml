@@ -8,8 +8,8 @@ on:
     branches:
       - 'main'
 
-  schedule:
-    - cron: '32 8 * * 4'
+# schedule:
+#   - cron: '32 8 * * 4'
 
 jobs:
   docker:
