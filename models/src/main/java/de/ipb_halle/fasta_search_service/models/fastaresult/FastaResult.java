@@ -19,9 +19,9 @@ package de.ipb_halle.fasta_search_service.models.fastaresult;
 
 import java.util.Objects;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * Data class holding information of an alignment hit of a fasta search.

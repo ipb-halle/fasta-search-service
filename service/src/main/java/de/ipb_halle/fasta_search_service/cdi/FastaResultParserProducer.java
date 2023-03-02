@@ -17,8 +17,8 @@
  */
 package de.ipb_halle.fasta_search_service.cdi;
 
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
+import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.inject.Produces;
 
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParser;
 

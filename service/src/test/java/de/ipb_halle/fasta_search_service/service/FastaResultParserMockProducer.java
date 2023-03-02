@@ -17,7 +17,7 @@
  */
 package de.ipb_halle.fasta_search_service.service;
 
-import javax.enterprise.inject.Produces;
+import jakarta.enterprise.inject.Produces;
 
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParser;
 

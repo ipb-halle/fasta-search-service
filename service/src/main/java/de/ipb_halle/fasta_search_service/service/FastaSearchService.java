@@ -19,7 +19,7 @@ package de.ipb_halle.fasta_search_service.service;
 
 import java.io.IOException;
 
-import javax.ejb.Local;
+import jakarta.ejb.Local;
 
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;

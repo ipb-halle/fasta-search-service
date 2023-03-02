@@ -17,9 +17,9 @@
  */
 package de.ipb_halle.fasta_search_service.config;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.ejb.Singleton;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
+import jakarta.ejb.Singleton;
 
 /**
  * EJB service that provides a database connection string from the environment

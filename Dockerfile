@@ -1,8 +1,8 @@
 #
 # Build web project with Maven
 #
-# Dockerfile: https://github.com/carlossg/docker-maven/blob/84e75894a94d204ab660c271e32984019ceb4070/openjdk-8/Dockerfile
-FROM maven:3.8.3-openjdk-8 AS mavenBuild
+# Dockerfile: https://github.com/carlossg/docker-maven/blob/ac292f26884bf2be9fe69f6e397da3b124c1e35c/eclipse-temurin-17/Dockerfile
+FROM maven:3.8.5-openjdk-17 AS mavenBuild
 LABEL stage=fasta-search-service-builder
 
 WORKDIR /usr/src/app
@@ -18,9 +18,9 @@ RUN mvn -B -e -C -pl '!integration-tests' clean package
 # The build and runtime environments need to be the same, because different Debian 
 # versions come with different versions of glibc.
 #
-# Dockerfile: https://github.com/tomitribe/docker-tomee/blob/58883d3a23534dc5ee1bc6cee455cf797650d507/TomEE-8.0/jre8/webprofile/Dockerfile
-# inherits from https://github.com/docker-library/openjdk/blob/c2daf6399c18547284d96995c633b0eecefc608f/8/jre/buster/Dockerfile
-FROM tomee:8-jre-8.0.8-webprofile AS fasta36Build
+# Dockerfile: https://github.com/tomitribe/docker-tomee/blob/14d51e67fad7eb358b39fcc09fa9cd0e7e205968/TomEE-9.0/jre17/Temurin/ubuntu/webprofile/Dockerfile
+# inherits from https://github.com/adoptium/containers/blob/0a0eef5b0673a25403d4b0fe87e4f4e07a4297ab/17/jre/ubuntu/jammy/Dockerfile.releases.full
+FROM tomee:9.0.0-jre17-webprofile AS fasta36Build
 LABEL stage=fasta-search-service-builder
 
 RUN set -ex \
@@ -43,9 +43,9 @@ RUN set -ex \
 #
 # Prepare a TomEE container with empty webapps directory and start TomEE as unprivileged user
 #
-# Dockerfile: https://github.com/tomitribe/docker-tomee/blob/58883d3a23534dc5ee1bc6cee455cf797650d507/TomEE-8.0/jre8/webprofile/Dockerfile
-# inherits from https://github.com/docker-library/openjdk/blob/c2daf6399c18547284d96995c633b0eecefc608f/8/jre/buster/Dockerfile
-FROM tomee:8-jre-8.0.8-webprofile
+# Dockerfile: https://github.com/tomitribe/docker-tomee/blob/14d51e67fad7eb358b39fcc09fa9cd0e7e205968/TomEE-9.0/jre17/Temurin/ubuntu/webprofile/Dockerfile
+# inherits from https://github.com/adoptium/containers/blob/0a0eef5b0673a25403d4b0fe87e4f4e07a4297ab/17/jre/ubuntu/jammy/Dockerfile.releases.full
+FROM tomee:9.0.0-jre17-webprofile
 
 ENV PATH /usr/local/tomee/bin:$PATH
 
