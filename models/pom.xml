@@ -24,6 +24,12 @@
 			<organization>Leibniz Institute of Plant Biochemistry (IPB), Halle (Saale), Germany</organization>
 			<organizationUrl>https://www.ipb-halle.de</organizationUrl>
 		</developer>
+                <developer>
+                        <name>Frank Broda</name>
+                        <email>fbroda@ipb-halle.de</email>
+                        <organization>Leibniz Institute of Plant Biochemistry (IPB), Halle (Saale), Germany</organization>
+                        <organizationUrl>https://www.ipb-halle.de</organizationUrl>
+                </developer>
 	</developers>
 
 	<licenses>
