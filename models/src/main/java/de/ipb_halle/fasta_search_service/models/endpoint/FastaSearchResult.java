@@ -19,7 +19,7 @@ package de.ipb_halle.fasta_search_service.models.endpoint;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import de.ipb_halle.fasta_search_service.models.fastaresult.FastaResult;
 

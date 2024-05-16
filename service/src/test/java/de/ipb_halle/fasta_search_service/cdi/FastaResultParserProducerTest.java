@@ -20,7 +20,7 @@ package de.ipb_halle.fasta_search_service.cdi;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.openejb.jee.EjbJar;
 import org.apache.openejb.junit.ApplicationComposer;

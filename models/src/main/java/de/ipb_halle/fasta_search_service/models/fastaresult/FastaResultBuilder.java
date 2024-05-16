@@ -19,8 +19,8 @@ package de.ipb_halle.fasta_search_service.models.fastaresult;
 
 import java.util.Set;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
 
 /**
  * Builder for {@link FastaResult} objects.

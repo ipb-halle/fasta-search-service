@@ -18,8 +18,8 @@
 package de.ipb_halle.fasta_search_service.endpoint;
 
 import java.io.IOException;
-import javax.ejb.LocalBean;
-import javax.ejb.Singleton;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Singleton;
 import de.ipb_halle.fasta_search_service.fastaresult.FastaResultParserException;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchRequest;
 import de.ipb_halle.fasta_search_service.models.endpoint.FastaSearchResult;

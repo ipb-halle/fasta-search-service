@@ -17,7 +17,7 @@
  */
 package de.ipb_halle.fasta_search_service.models.endpoint;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * POJO for fasta sequence search queries.

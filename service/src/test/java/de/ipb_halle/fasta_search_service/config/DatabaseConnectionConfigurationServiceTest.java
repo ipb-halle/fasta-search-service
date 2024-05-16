@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.openejb.jee.EnvEntry;
 import org.apache.openejb.jee.WebApp;
